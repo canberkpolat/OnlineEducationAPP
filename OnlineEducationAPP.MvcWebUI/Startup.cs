@@ -29,6 +29,17 @@ namespace OnlineEducationAPP.MvcWebUI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("_myAllowSpecificOrigins",
+                builder =>
+                {
+                    builder
+                        .WithOrigins("https://onlineeducationapp.canberkpolat.com")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
 
             services.AddDbContext<OnlineEducationDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("OnlineEducationAppConnection")));
@@ -77,6 +88,8 @@ namespace OnlineEducationAPP.MvcWebUI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<IdentityRole> roleManager)
         {
+            app.UseCors("_myAllowSpecificOrigins");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
