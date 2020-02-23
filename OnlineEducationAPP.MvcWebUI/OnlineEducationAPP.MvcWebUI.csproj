@@ -224,4 +224,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\home-page\img\team\" />
+  </ItemGroup>
+
 </Project>
