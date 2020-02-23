@@ -1,13 +1,392 @@
-﻿
+﻿<!doctype html>
+<html class="no-js" lang="zxx">
 
-@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@if (User.Identity.IsAuthenticated)
-{
-    <h1>Index</h1>
-}
+<head>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>SiteAdi</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="~home-page/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~home-page/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~home-page/css/magnific-popup.css">
+    <link rel="stylesheet" href="~home-page/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~home-page/css/themify-icons.css">
+    <link rel="stylesheet" href="~home-page/css/nice-select.css">
+    <link rel="stylesheet" href="~home-page/css/flaticon.css">
+    <link rel="stylesheet" href="~home-page/css/gijgo.css">
+    <link rel="stylesheet" href="~home-page/css/animate.min.css">
+    <link rel="stylesheet" href="~home-page/css/slick.css">
+    <link rel="stylesheet" href="~home-page/css/slicknav.css">
+    <link rel="stylesheet" href="~home-page/css/style.css">
+    <!-- <link rel="stylesheet" href="~home-page/css/responsive.css"> -->
+</head>
+
+<body>
+    <!-- header-start -->
+    <header>
+        <div id="home" class="header-area ">
+            <div id="sticky-header" class="main-header-area">
+                <div class="container-fluid p-0">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col-xl-2 col-lg-2">
+                            <div class="logo-img">
+                                <a href="index.cshtml">
+                                    <img src="img/logo.png" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-8">
+                            <div class="main-menu  d-none d-lg-block text-center">
+                                <nav class="site-navigation page-navigation">
+                                    <ul id="navigation">
+                                        <li><a href="#home">Home</a></li>
+                                        <li><a href="#education">Education</a></li>
+                                        <li><a href="#about-us">About us</a></li>
+                                        <li><a href="#company">Company</a></li>
+                                        <li><a href="#team">Team</a></li>
+                                        <li><a href="#contact">Contact</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 d-none d-lg-block">
+                            <div class="log_chat_area d-flex align-items-end">
+                                <a href="#" data-scroll-nav="0" class="say_hi">Login</a>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header-end -->
+    <!-- slider_area_start -->
+    <div class="slider_area">
+        <div class="single_slider  d-flex align-items-center slider_bg_1 overlay">
+            <div class="container">
+                <div class="row align-items-center justify-content-start">
+                    <div class="col-lg-10 col-md-10">
+                        <div class="slider_text">
+                            <h3 class="wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".1s">
+                                Fastest method to learn,
+                                efficient way to teach
+                                with siteAdi.
+                            </h3>
+                            <a class="boxed-btn3 wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".2s" href="">Register</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- slider_area_end -->
+    <!-- service_area_start-->
+    <div id="education" class="service_area">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="section_title text-center mb-70">
+                        <span class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s">Educations</span>
+                        <h3 class="wow fadeInUp" data-wow-duration="1.2s" data-wow-delay=".2s">
+                            With high-skilled teachers
+                            we can provide the
+                            best educations.
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-md-4">
+                    <div class="single_service text-center wow fadeInLeft" data-wow-duration="1.2s" data-wow-delay=".4s">
+                        <div class="icon">
+                            <img src="~/img/svg_icon/live.svg" alt="">
+                        </div>
+                        <h3>Live Streaming</h3>
+                        <p>You can follow the lectures as live, and ask if any questions you have instantly.</p>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4">
+                    <div class="single_service text-center wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
+                        <div class="icon">
+                            <img src="~/img/svg_icon/computer.svg" alt="">
+                        </div>
+                        <h3>Group Chat</h3>
+                        <p>You can talk with other students while following lectures simultaneously.</p>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4">
+                    <div class="single_service text-center wow fadeInRight" data-wow-duration="1.2s" data-wow-delay=".4s">
+                        <div class="icon">
+                            <img src="~/img/svg_icon/mobile.svg" alt="">
+                        </div>
+                        <h3>Scheduled Meetings</h3>
+                        <p>You can set a question-answer with others via lectures.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ service_area_end-->
+    <!--about_area start-->
+    <div id="about-us" class="about_area">
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="about_info">
+                        <div class="section_title white_text">
+                            <span class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">About Us</span>
+                            <h3 class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".4s">Mission</h3>
+                            <p class="mid_text wow fadeInUp" data-wow-duration="1s" data-wow-delay=".5s">Our mission is providing high quality and efficient educations that will increase interactivity of teaching and learning for both student and teacher.</p>
+                            <h3 class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".4s">Vision</h3>
+                            <p class="mid_text wow fadeInUp" data-wow-duration="1s" data-wow-delay=".5s">Our vision is being one of the key players in online education platforms by providing enhanced live education, innovative ideas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--about_area_end-->
+    <!--how_we_work_area_start-->
+    <div id="company" class="how_we_work_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="work_info">
+                        <div class="section_title">
+                            <h3 class="wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">How we work</h3>
+                            <p class="mid_text wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".4s">"The base of the platform is aimed to increase the quality of education."</p>
+                            <p class="last_p wow fadeInRight" data-wow-duration="1s" data-wow-delay=".5s">The platform includes live streaming education channels, group chatting during the streaming, and gives the facility that provides scheduled question-answer lectures which scheduled by groups of students.</p>
+                        </div>
+                        <div class="video_watch d-flex align-items-center">
+                            <div class="play_btn wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s">
+                                <a href="" class="video_icon popup-video"> <i class="fa fa-play"></i> </a>
+                            </div>
+                            <span class="wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".7s"> Watch the Trailer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--how_we_work_area_end-->
+    <!-- team_member_start -->
+    <div id="team" class="team_area ">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="section_title text-center mb-90">
+                        <h3 class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">Our Creative Team</h3>
+                        <p class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s">Tour function information without cross action media value quickly maximize timely deliverables.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-3 col-md-6">
+                    <div class="single_team wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                        <div class="team_thumb">
+                            <img src="~/img/team/1.png" alt="">
+                            <div class="team_hover">
+                                <div class="hover_inner text-center">
+                                    <ul>
+                                        <li><a href="https://www.linkedin.com/in/tayfunguven25/"> <i class="fa fa-linkedin"></i> </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team_title text-center">
+                            <h3>Tayfun GÜVEN</h3>
+                            <p>Computer Engineer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="single_team wow fadeInUp" data-wow-duration="1s" data-wow-delay=".4s">
+                        <div class="team_thumb">
+                            <img src="~/img/team/2.png" alt="">
+                            <div class="team_hover">
+                                <div class="hover_inner text-center">
+                                    <ul>
+                                        <li><a href="https://www.linkedin.com/in/haydar-can-kubilay-g%C3%BCm%C3%BC%C5%9F-a0840a140/"> <i class="fa fa-linkedin"></i> </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team_title text-center">
+                            <h3>Haydar GÜMÜŞ</h3>
+                            <p>Computer Engineer</p>
+                            <p>&</p>
+                            <p>Industrial Engineer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="single_team wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s">
+                        <div class="team_thumb">
+                            <img src="~/img/team/3.png" alt="">
+                            <div class="team_hover">
+                                <div class="hover_inner text-center">
+                                    <ul>
+                                        <li><a href="https://www.linkedin.com/in/canberk-polat-2168b369/"> <i class="fa fa-linkedin"></i> </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team_title text-center">
+                            <h3>Canberk POLAT</h3>
+                            <p>Computer Engineer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ team_member_end -->
+    <!-- testimonial_area  -->
+    <div class="testimonial_area ">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="testmonial_active owl-carousel">
+                        <div class="single_carousel">
+                            <div class="single_testmonial text-center">
+                                <div class="quote">
+                                    <img src="img/testmonial/quote.svg" alt="">
+                                </div>
+                                <p>
+                                    What is now proved was once only imagined.
+                                </p>
+                                <div class="testmonial_author">
+                                    <h3>William Blake</h3>
+                                    <span>Poetrist</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="single_carousel">
+                            <div class="single_testmonial text-center">
+                                <div class="quote">
+                                    <img src="img/testmonial/quote.svg" alt="">
+                                </div>
+                                <p>
+                                    I want to put a ding in the universe.
+                                </p>
+                                <div class="testmonial_author">
+                                    <h3>Steve Jobs</h3>
+                                    <span>Founder of Apple Computer Inc.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="single_carousel">
+                            <div class="single_testmonial text-center">
+                                <div class="quote">
+                                    <img src="img/testmonial/quote.svg" alt="">
+                                </div>
+                                <p>
+                                    You can’t solve a problem on the same level that it was created. You have to rise above it to the next level.
+                                </p>
+                                <div class="testmonial_author">
+                                    <h3>Albert Einstein</h3>
+                                    <span>Physicist</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /testimonial_area  -->
+    <!-- footer start -->
+    <footer class="footer">
+        <div id="contact" class="footer_top">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-2 col-md-3">
+                        <div class="footer_logo wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">
+                            <a href="home_page">
+                                <img src="img/logo.png" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xl-7 col-lg-7 col-md-9">
+                        <div class="contact-info">
+                            <div class="section_title white_text">
+                                <h3>Contact</h3>
+                                <span class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">Tayfun GÜVEN<p>Mail:  tayfun.guven25@gmail.com</p></span>
+                                <span class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">Haydar Can Kubilay GÜMÜŞ<p>Mail:  gumuskubi@hotmail.com</p></span>
+                                <span class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">Canberk POLAT<p>Mail: hello@canberkpolat.com</p></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-12">
+                        <div class="socail_links">
+                            <ul>
+                                <li><a class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s" href="#"> <i class="fa fa-facebook"></i> </a></li>
+                                <li><a class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".4s" href="#"> <i class="fa fa-linkedin"></i> </a></li>
+                                <li><a class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".5s" href="#"> <i class="fa fa-instagram"></i> </a></li>
+                                <li><a class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s" href="#"> <i class="fa fa-google-plus"></i> </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copy-right_text">
+            <div class="container">
+                <div class="footer_border"></div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <p class="copy_right text-center wow fadeInUp" data-wow-duration="1s" data-wow-delay="1.3s">                            
+                            Copyright &copy;
+                            <script>document.write(new Date().getFullYear());</script> All rights reserved | <a href="#company" target="_blank">CompanyName</a>                           
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--/ footer end  -->
+    <!-- JS here -->
+    <script src="~home-page/js/vendor/modernizr-3.5.0.min.js"></script>
+    <script src="~home-page/js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="~home-page/js/popper.min.js"></script>
+    <script src="~home-page/js/bootstrap.min.js"></script>
+    <script src="~home-page/js/owl.carousel.min.js"></script>
+    <script src="~home-page/js/isotope.pkgd.min.js"></script>
+    <script src="~home-page/js/ajax-form.js"></script>
+    <script src="~home-page/js/waypoints.min.js"></script>
+    <script src="~home-page/js/jquery.counterup.min.js"></script>
+    <script src="~home-page/js/imagesloaded.pkgd.min.js"></script>
+    <script src="~home-page/js/scrollIt.js"></script>
+    <script src="~home-page/js/jquery.scrollUp.min.js"></script>
+    <script src="~home-page/js/wow.min.js"></script>
+    <script src="~home-page/js/nice-select.min.js"></script>
+    <script src="~home-page/js/jquery.slicknav.min.js"></script>
+    <script src="~home-page/js/jquery.magnific-popup.min.js"></script>
+    <script src="~home-page/js/plugins.js"></script>
+    <script src="~home-page/js/gijgo.min.js"></script>
+
+    <!--contact js-->
+    <script src="~home-page/js/contact.js"></script>
+    <script src="~home-page/js/jquery.ajaxchimp.min.js"></script>
+    <script src="~home-page/js/jquery.form.js"></script>
+    <script src="~home-page/js/jquery.validate.min.js"></script>
+    <script src="~home-page/js/mail-script.js"></script>
+
+    <script src="~home-page/js/main.js"></script>
+</body>
+
+</html>
 
 
 
