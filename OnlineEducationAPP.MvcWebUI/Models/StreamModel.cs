@@ -14,5 +14,6 @@ namespace OnlineEducationAPP.MvcWebUI.Models
         public string StreamKey { get; set; }
         public bool IsActive { get; set; }
         public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 }
