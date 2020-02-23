@@ -1,8 +1,14 @@
-﻿
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
 @{
     Layout = null;
 }
 
+@if (!User.Identity.IsAuthenticated)
+{
     <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow navbar-static-top navbar-light navbar-brand-center">
         <div class="navbar-wrapper">
             <div class="navbar-header">
@@ -12,6 +18,46 @@
                         <a class="navbar-brand" href="index.html">
                             <img class="brand-logo" alt="modern admin logo" src="~/app-assets/images/logo/logo.png">
                             <h3 class="brand-text">Modern Admin</h3>
+                        </a>
+                    </li>
+                    <li class="nav-item d-md-none">
+                        <a class="nav-link open-navbar-container" data-toggle="collapse" data-target="#navbar-mobile"><i class="la la-ellipsis-v"></i></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-container container center-layout">
+                <div class="collapse navbar-collapse" id="navbar-mobile">
+                    <ul class="nav navbar-nav mr-auto float-left">
+
+
+                        <li class="nav-item nav-search">
+                            <a class="nav-link nav-link-search" href="#"><i class="ficon ft-search"></i></a>
+                            <div class="search-input">
+                                <input class="input" type="text" placeholder="Explore Modern...">
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav float-right">
+                        <li>
+                            <a class="btn btn-secondary" asp-controller="Account" asp-action="Login" type="button"><i class="la la-user"></i>Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+}
+else
+{
+    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow navbar-static-top navbar-light navbar-brand-center">
+        <div class="navbar-wrapper">
+            <div class="navbar-header">
+                <ul class="nav navbar-nav flex-row">
+                    <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
+                    <li class="nav-item">
+                        <a class="navbar-brand" asp-controller="Dashboard" asp-action="Index">
+                            <img class="brand-logo" alt="modern admin logo" src="~/app-assets/images/logo/logo.png">
+                            <h3 class="brand-text">Online Education</h3>
                         </a>
                     </li>
                     <li class="nav-item d-md-none">
@@ -37,7 +83,9 @@
                                     <span class="user-name text-bold-700">@User.Identity.Name</span>
                                 </span>
                                 <span class="avatar avatar-online">
-                                    <img src="~/app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"><i></i>
+                                    @*<span gravatar-email="hello@canberkpolat.com" image-size="100" alt="avatar"></span>*@
+                                    @*<img gravatar-email="gumuskubi@hotmail.com" gravatar-size="80" alt="Gravatar" /><i></i>*@
+                                    @Html.GravatarImage("ali@hotmail.com",size: 80,defaultImage: GravatarHtmlHelper.DefaultImage.Identicon,rating: GravatarHtmlHelper.Rating.PG,cssClass: "gravatar img-responsive")
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
@@ -206,3 +254,4 @@
             </div>
         </div>
     </nav>
+}
