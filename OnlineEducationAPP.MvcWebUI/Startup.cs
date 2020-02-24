@@ -10,8 +10,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OnlineEducationAPP.MvcWebUI.Helpers;
 using OnlineEducationAPP.MvcWebUI.Identity;
+using OnlineEducationAPP.MvcWebUI.Repository.Abstract;
+using OnlineEducationAPP.MvcWebUI.Repository.Concrete.EntityFrameworkCore;
 
 namespace OnlineEducationAPP.MvcWebUI
 {
@@ -43,9 +44,13 @@ namespace OnlineEducationAPP.MvcWebUI
 
             services.AddDbContext<OnlineEducationDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("OnlineEducationAppConnection")));
+            services.AddTransient<ICourseRepository, EfCourseRepository>();
+            services.AddTransient<ICategoryRepository, EfCategoryRepository>();
+            services.AddTransient<IUnitOfWork, EfUnitOfWork>();
+            
             
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 //Password Settings
                 options.Password.RequireDigit = true;

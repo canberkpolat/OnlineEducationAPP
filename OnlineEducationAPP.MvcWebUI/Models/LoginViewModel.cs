@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OnlineEducationAPP.MvcWebUI.Models
 {
-    public class LoginModel
+    public class LoginViewModel
     {
         [Required]
         public string UserName { get; set; }

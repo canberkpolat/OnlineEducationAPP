@@ -13,13 +13,13 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly SignInManager<IdentityUser> signInManager;
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         
 
         
-        public AccountController(SignInManager<IdentityUser> _signInManager , UserManager<IdentityUser> _userManager, RoleManager<IdentityRole> _roleManager)
+        public AccountController(SignInManager<ApplicationUser> _signInManager , UserManager<ApplicationUser> _userManager, RoleManager<IdentityRole> _roleManager)
         {
             signInManager = _signInManager;
             userManager = _userManager;
@@ -38,7 +38,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginModel model, string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             
             if (ModelState.IsValid)
@@ -80,7 +80,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser();
+                var user = new ApplicationUser();
                 user.UserName = model.UserName;
                 user.Email = model.Email;
 
