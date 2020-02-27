@@ -2504,7 +2504,7 @@ h3 {
 /* line 2, ../../Arafath/CL/December/233. Startup/HTML/scss/_tesmonial.scss */
 .testimonial_area {
     padding: 160px 0;
-    background-image: url(../img/testmonial/banner.png);
+    background-image: url(../img/testmonial/literature.png);
     position: relative;
     z-index: 0;
     background-size: cover;
@@ -3520,7 +3520,7 @@ h3 {
     right: 0;
     top: 0;
     height: 100%;
-    background-image: url(../img/work/work.png);
+    background-image: url(../img/work/stream.png);
     background-size: cover;
     background-position: center center;
     -webkit-border-radius: 20px 0 0 20px;
