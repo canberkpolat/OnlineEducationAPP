@@ -1,29 +1,31 @@
 ﻿@model OnlineEducationAPP.MvcWebUI.ViewComponents.CourseCategoryViewModel
 
-    <li class="dropdown nav-item mega-dropdown">
-        <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="la la-columns"></i>Courses</a>
-        <ul class="mega-dropdown-menu dropdown-menu row">
+<li class="dropdown nav-item mega-dropdown">
+    <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="la la-columns"></i>Courses</a>
+    <ul class="mega-dropdown-menu dropdown-menu row">
 
-            <li class="col-md-3">
-                @foreach (var category in Model.Categories)
-                {
-                    <h6 class="dropdown-menu-header text-uppercase" asp-route-id="@category.Id">@category.Name</h6>
-                    <ul class="drilldown-menu">
-                        <li class="menu-list">
-                            <ul>
-                                @foreach (var course in Model.Courses)
+
+        @foreach (var category in Model.Categories)
+        {
+            <li class="col-md-auto">
+                <h6 class="dropdown-menu-header text-uppercase" asp-route-id="@category.Id">@category.Name</h6>
+                <ul class="drilldown-menu">
+                    <li class="menu-list">
+                        <ul>
+                            @foreach (var course in Model.Courses)
+                            {
+                                @if (category.Id == course.CategoryId)
                                 {
-                                    @if (category.Id == course.CategoryId)
-                                    {
-                                        <p>@Html.ActionLink(course.Name, "Index", "Dashboard", new { course.Id }, null)</p>
-                                    }
-
+                                    <p>@Html.ActionLink(course.Name, "Index", "Dashboard", new { course.Id }, null)</p>
                                 }
-                            </ul>
-                        </li>
-                    </ul>
-                }
 
+                            }
+                        </ul>
+                    </li>
+                </ul>
             </li>
-        </ul>
-    </li>
+        }
+
+
+    </ul>
+</li>

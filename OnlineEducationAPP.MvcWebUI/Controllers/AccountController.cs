@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OnlineEducationAPP.MvcWebUI.Entity;
 using OnlineEducationAPP.MvcWebUI.Identity;
 using OnlineEducationAPP.MvcWebUI.Models;
+using OnlineEducationAPP.MvcWebUI.Repository.Abstract;
 
 namespace OnlineEducationAPP.MvcWebUI.Controllers
 {
@@ -16,10 +18,11 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        
 
-        
-        public AccountController(SignInManager<ApplicationUser> _signInManager , UserManager<ApplicationUser> _userManager, RoleManager<IdentityRole> _roleManager)
+
+
+
+        public AccountController(SignInManager<ApplicationUser> _signInManager, UserManager<ApplicationUser> _userManager, RoleManager<IdentityRole> _roleManager)
         {
             signInManager = _signInManager;
             userManager = _userManager;
@@ -30,7 +33,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public  IActionResult Login(string returnUrl)
+        public IActionResult Login(string returnUrl)
         {
             ViewBag.returnUrl = returnUrl;
             return View();
@@ -40,14 +43,14 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            
+
             if (ModelState.IsValid)
             {
                 var user = await userManager.FindByNameAsync(model.UserName);
-                if(user != null)
+                if (user != null)
                 {
                     await signInManager.SignOutAsync();
-                    var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
+                    var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
                     if (result.Succeeded)
                     {
                         if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -57,7 +60,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 }
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return View(model);
-                
+
             }
             return View(model);
         }
@@ -70,7 +73,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public  IActionResult Register()
+        public IActionResult Register()
         {
             return View();
         }
@@ -80,9 +83,14 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         {
             if (ModelState.IsValid)
             {
+                   
                 var user = new ApplicationUser();
+                user.Name = model.Name;
+                user.Surname = model.Surname;
                 user.UserName = model.UserName;
                 user.Email = model.Email;
+                user.ProfileImageUrl = "/app-assets/images/backgrounds/defaultPP.jpg";
+                user.CarouselImageUrl = "/app-assets/images/backgrounds/defaultCarousel.jpg";
 
                 var result = await userManager.CreateAsync(user, model.Password);
 
@@ -95,9 +103,9 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                     }
                     await userManager.AddToRoleAsync(user, "Student");
                     await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index","Dashboard");
+                    return RedirectToAction("Index", "Dashboard");
                 }
-                foreach(var error in result.Errors)
+                foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }

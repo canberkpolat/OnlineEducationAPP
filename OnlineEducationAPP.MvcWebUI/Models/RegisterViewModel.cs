@@ -8,6 +8,10 @@ namespace OnlineEducationAPP.MvcWebUI.Models
 {
     public class RegisterViewModel
     {
+        [Required, MaxLength(50)]
+        public string Name { get; set; }
+        [Required, MaxLength(50)]
+        public string Surname { get; set; }
         [Required, MaxLength(256)]
         public string UserName { get; set; }
         [Required, MaxLength(256)]

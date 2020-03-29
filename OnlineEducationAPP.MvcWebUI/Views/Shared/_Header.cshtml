@@ -2,7 +2,8 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-
+@using Microsoft.AspNetCore.Identity
+@inject  UserManager<OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser> UserManager
 @{
     Layout = null;
 }
@@ -83,13 +84,11 @@ else
                                     <span class="user-name text-bold-700">@User.Identity.Name</span>
                                 </span>
                                 <span class="avatar avatar-online">
-                                    @*<span gravatar-email="hello@canberkpolat.com" image-size="100" alt="avatar"></span>*@
-                                    @*<img gravatar-email="gumuskubi@hotmail.com" gravatar-size="80" alt="Gravatar" /><i></i>*@
-                                    @Html.GravatarImage("ali@hotmail.com",size: 80,defaultImage: GravatarHtmlHelper.DefaultImage.Identicon,rating: GravatarHtmlHelper.Rating.PG,cssClass: "gravatar img-responsive")
+                                    @Html.GravatarImage("example@we.com",size: 80,defaultImage: GravatarHtmlHelper.DefaultImage.Identicon,rating: GravatarHtmlHelper.Rating.PG,cssClass: "gravatar img-responsive")
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#"><i class="ft-user"></i> Edit Profile</a>
+                                <a class="dropdown-item" asp-controller="Profile" asp-action="Detail" asp-route-id="@UserManager.GetUserId(User)"><i class="ft-user"></i>Profile</a>
 
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="ft-power"></i> Logout</a>

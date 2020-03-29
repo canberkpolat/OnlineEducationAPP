@@ -9,7 +9,10 @@ namespace OnlineEducationAPP.MvcWebUI.Identity
 {
     public class ApplicationUser : IdentityUser
     {
-
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string ProfileImageUrl { get; set; }
+        public string CarouselImageUrl { get; set; }
         public Stream Stream { get; set; }
     }
 }

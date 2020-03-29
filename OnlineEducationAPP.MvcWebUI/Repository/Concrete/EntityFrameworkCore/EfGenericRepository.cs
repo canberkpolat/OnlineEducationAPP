@@ -16,6 +16,12 @@ namespace OnlineEducationAPP.MvcWebUI.Repository.Concrete.EntityFrameworkCore
         {
             context = _context;
         }
+
+        public void Add(T entity)
+        {
+            context.Set<T>().Add(entity);
+        }
+
         public IQueryable<T> Find(Expression<Func<T, bool>> predicate)
         {
             return context.Set<T>().Where(predicate);

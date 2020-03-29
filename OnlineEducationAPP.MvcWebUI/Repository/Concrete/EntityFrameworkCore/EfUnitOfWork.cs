@@ -18,9 +18,12 @@ namespace OnlineEducationAPP.MvcWebUI.Repository.Concrete.EntityFrameworkCore
         private ICourseRepository courses;
         private ICategoryRepository categories;
 
+
         public ICourseRepository Courses => courses ?? (courses = new EfCourseRepository(context));
 
         public ICategoryRepository Categories => categories ?? (categories = new EfCategoryRepository(context));
+
+
 
         public int SaveChanges()
         {

@@ -10,7 +10,6 @@ namespace OnlineEducationAPP.MvcWebUI.Repository.Abstract
         ICategoryRepository Categories { get; }
         ICourseRepository Courses { get; }
         
-        
 
         int SaveChanges();
     }

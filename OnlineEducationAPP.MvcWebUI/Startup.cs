@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,8 +48,9 @@ namespace OnlineEducationAPP.MvcWebUI
             services.AddTransient<ICourseRepository, EfCourseRepository>();
             services.AddTransient<ICategoryRepository, EfCategoryRepository>();
             services.AddTransient<IUnitOfWork, EfUnitOfWork>();
+
             
-            
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
@@ -79,7 +81,7 @@ namespace OnlineEducationAPP.MvcWebUI
             //Cookie Settings
             services.ConfigureApplicationCookie(options =>
             {
-                options.Cookie.Expiration = TimeSpan.FromMinutes(1);
+                options.Cookie.Expiration = TimeSpan.FromDays   (1);
                 options.Cookie.HttpOnly = true;
                 options.LoginPath = "/Account/Login";
                 options.LogoutPath = "/Account/Logout";

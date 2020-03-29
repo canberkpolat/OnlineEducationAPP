@@ -1,17 +1,14 @@
 ﻿@{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <head>
-     @{Html.RenderPartial("_CssJsLinks");}
+
 </head>
 <body class="horizontal-layout horizontal-menu horizontal-menu-padding 2-columns   menu-expanded"
       data-open="click" data-menu="horizontal-menu" data-col="2-columns">
 
-    @Html.Partial("_Header")
-    <!-- ////////////////////////////////////////////////////////////////////////////-->
-    @Html.Partial("_Navbar")
 
     <div class="app-content container center-layout mt-2">
         <div class="content-wrapper">
@@ -21,12 +18,11 @@
                         <div class="breadcrumb-wrapper col-12">
                             <ol class="breadcrumb">
                                 @*<li class="breadcrumb-item">
-                                    <a href="/Dashboard/Index">Dashboard</a>
-                                </li>*@
+                                        <a href="/Dashboard/Index">Dashboard</a>
+                                    </li>*@
                             </ol>
                         </div>
                     </div>
-                    <h3 class="content-header-title mb-0">Title</h3>
                 </div>
             </div>
             <div class="content-body">
@@ -53,17 +49,5 @@
             </div>
         </div>
     </div>
-
-    <!-- ////////////////////////////////////////////////////////////////////////////-->
-    <footer class="footer footer-transparent footer-light navbar-shadow">
-        <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2 container center-layout">
-            <span class="float-md-left d-block d-md-inline-block">
-                Copyright &copy; 2018 <a class="text-bold-800 grey darken-2" href="https://themeforest.net/user/pixinvent/portfolio?ref=pixinvent"
-                                         target="_blank">PIXINVENT</a>, All rights reserved.
-            </span>
-            <span class="float-md-right d-block d-md-inline-blockd-none d-lg-block">Hand-crafted & Made with <i class="ft-heart pink"></i></span>
-        </p>
-    </footer>
-    
 </body>
 </html>

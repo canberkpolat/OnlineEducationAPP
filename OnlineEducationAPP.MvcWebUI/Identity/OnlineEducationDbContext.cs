@@ -14,6 +14,7 @@ namespace OnlineEducationAPP.MvcWebUI.Identity
         public DbSet<Course> Courses { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Stream> Streams { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
         public OnlineEducationDbContext(DbContextOptions<OnlineEducationDbContext> options) : base(options)
         {
 
