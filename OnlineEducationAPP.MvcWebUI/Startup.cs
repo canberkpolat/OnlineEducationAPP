@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OnlineEducationAPP.MvcWebUI.Identity;
 using OnlineEducationAPP.MvcWebUI.Repository.Abstract;
 using OnlineEducationAPP.MvcWebUI.Repository.Concrete.EntityFrameworkCore;
+using OnlineEducationAPP.MvcWebUI.Hubs;
 
 namespace OnlineEducationAPP.MvcWebUI
 {
@@ -47,9 +48,13 @@ namespace OnlineEducationAPP.MvcWebUI
                 options => options.UseSqlServer(Configuration.GetConnectionString("OnlineEducationAppConnection")));
             services.AddTransient<ICourseRepository, EfCourseRepository>();
             services.AddTransient<ICategoryRepository, EfCategoryRepository>();
+            services.AddTransient<IStreamRepository, EfStreamRepository>();
             services.AddTransient<IUnitOfWork, EfUnitOfWork>();
 
-            
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+
+
 
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -90,6 +95,8 @@ namespace OnlineEducationAPP.MvcWebUI
 
 
             services.AddMvc();
+            services.AddSignalR();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -104,6 +111,12 @@ namespace OnlineEducationAPP.MvcWebUI
             app.UseStatusCodePages();
             app.UseStaticFiles();
             app.UseAuthentication();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

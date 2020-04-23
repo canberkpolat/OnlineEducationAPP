@@ -10,6 +10,7 @@ namespace OnlineEducationAPP.MvcWebUI.Entity
     public class Stream
     {
         public int Id { get; set; }
+        public string StreamName { get; set; }
         public string Endpoint { get; set; }
         public string StreamKey { get; set; }
         public bool IsActive { get; set; }

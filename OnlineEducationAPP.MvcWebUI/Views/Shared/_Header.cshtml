@@ -87,11 +87,19 @@ else
                                     @Html.GravatarImage("example@we.com",size: 80,defaultImage: GravatarHtmlHelper.DefaultImage.Identicon,rating: GravatarHtmlHelper.Rating.PG,cssClass: "gravatar img-responsive")
                                 </span>
                             </a>
+
                             <div class="dropdown-menu dropdown-menu-right">
+                                @if (User.IsInRole("Teacher"))
+                                {
+                                    <a class="dropdown-item" asp-controller="Stream" asp-action="Create"><i class="la la-television"></i> Broadcast</a>
+                                    <div class="dropdown-divider"></div>
+                                }
                                 <a class="dropdown-item" asp-controller="Profile" asp-action="Detail" asp-route-id="@UserManager.GetUserId(User)"><i class="ft-user"></i>Profile</a>
 
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="ft-power"></i> Logout</a>
+
+
                             </div>
                         </li>
 

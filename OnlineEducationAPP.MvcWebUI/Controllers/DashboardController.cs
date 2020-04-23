@@ -19,7 +19,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             userManager = _userManager;
         }
 
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = "Student, Teacher")]
         public IActionResult Index()
         {
             
