@@ -11,9 +11,10 @@ using System;
 namespace OnlineEducationAPP.MvcWebUI.Migrations
 {
     [DbContext(typeof(OnlineEducationDbContext))]
-    partial class OnlineEducationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200425190220_stream_model_newfield_added")]
+    partial class stream_model_newfield_added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

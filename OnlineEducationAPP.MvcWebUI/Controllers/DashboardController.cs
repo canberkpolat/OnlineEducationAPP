@@ -14,8 +14,10 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
     public class DashboardController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
-        public DashboardController(UserManager<ApplicationUser> _userManager)
+        private readonly IStreamRepository streamRepository;
+        public DashboardController(UserManager<ApplicationUser> _userManager, IStreamRepository _streamRepository)
         {
+            streamRepository = _streamRepository;
             userManager = _userManager;
         }
 
@@ -30,6 +32,12 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         {
             var users = userManager.Users.ToList();
             return View(users);
+        }
+
+        public IActionResult ActiveStreams()
+        {
+            var streams = streamRepository.GetAll().Where(stream => stream.IsActive).ToList();
+            return View(streams);
         }
 
     }

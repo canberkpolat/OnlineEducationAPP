@@ -1,0 +1,20 @@
+﻿@model  List<Stream>
+@{
+    ViewData["Title"] = "ActiveStreams";
+}
+
+<h1>ActiveStreams</h1>
+
+@if(Model == null)
+{
+    <h1>There is no active Stream Right Now.</h1>
+}
+else
+{
+    foreach (var stream in Model)
+    {
+        <h1>@stream.StreamName</h1>
+    }
+}
+
+
