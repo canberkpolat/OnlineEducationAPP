@@ -11,7 +11,7 @@ using OnlineEducationAPP.MvcWebUI.Repository.Abstract;
 
 namespace OnlineEducationAPP.MvcWebUI.Controllers
 {
-    
+
     public class StreamController : Controller
     {
         private IStreamRepository streamRepository;
@@ -31,8 +31,10 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         }
         [Authorize(Roles = "Teacher")]
         [HttpPost]
-        public string Create(int courseId, string streamName,string userId)
+        public dynamic Create(int courseId, string streamName, string userId)
         {
+            string streamKey = Guid.NewGuid().ToString();
+
             var model = new Stream
             {
                 CourseId = courseId,
@@ -40,15 +42,20 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 IsActive = false,
                 StreamName = streamName,
                 UserId = userId,
-                Endpoint  = "https://onlineeducationapp.canberkpolat.com/hls/",
-                StreamKey = Guid.NewGuid().ToString()
+                LiveStreamEndpoint = "https://onlineeducationapp.canberkpolat.com/hls/"+ streamKey,
+                VideoOnDemandEndpoint = "https://onlineeducationapp.canberkpolat.com/vod/"+ streamKey,
+                StreamKey = streamKey
             };
             streamRepository.Add(model);
             unitOfWork.SaveChanges();
 
-            var streamLink = model.Endpoint + "/" + model.StreamKey;
+            var response = new
+            {
+                StreamEndPoint = "https://onlineeducationapp.canberkpolat.com/live",
+                StreamKey = streamKey
+            };
 
-            return streamLink;
+            return response;
         }
 
         [HttpPost]
@@ -59,6 +66,24 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             if(stream != null) { 
                 stream.IsActive = true;
                 stream.StartTime = DateTime.Now;
+
+                unitOfWork.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Invalid stream key.");
+            }
+        }
+
+        [HttpPost]
+        [Route("Stream/Update")]
+        public void Update([FromForm] string name)
+        {
+            var stream = streamRepository.Find(p => p.StreamKey == name && p.EndTime == null).FirstOrDefault();
+            if (stream != null)
+            {
+                stream.IsActive = true;
+                stream.UpdateTime = DateTime.Now;
 
                 unitOfWork.SaveChanges();
             }
