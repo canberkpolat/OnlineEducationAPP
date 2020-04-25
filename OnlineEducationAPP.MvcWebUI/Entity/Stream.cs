@@ -14,8 +14,8 @@ namespace OnlineEducationAPP.MvcWebUI.Entity
         public string Endpoint { get; set; }
         public string StreamKey { get; set; }
         public bool IsActive { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
 
         public string UserId { get; set; }
         public ApplicationUser User  { get; set; }

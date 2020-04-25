@@ -37,7 +37,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             var model = new Stream
             {
                 CourseId = courseId,
-                StartTime = DateTime.Now,
+                StartTime = null,
                 IsActive = true,
                 StreamName = streamName,
                 UserId = userId,
@@ -51,6 +51,27 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
             return RedirectToAction("Create", model);
         }
-        
+
+        [HttpGet]
+        [Route("Stream/Start/{key}")]
+        public void Start(string key)
+        {
+            var stream = streamRepository.Find(p => p.StreamKey == key).FirstOrDefault();
+            stream.IsActive = true;
+            stream.StartTime = DateTime.Now;
+
+            unitOfWork.SaveChanges();
+        }
+
+        [HttpGet]
+        [Route("Stream/End/{key}")]
+        public void End(string key)
+        {
+            var stream = streamRepository.Find(p => p.StreamKey == key).FirstOrDefault();
+            stream.IsActive = false;
+            stream.EndTime = DateTime.Now;
+
+            unitOfWork.SaveChanges();
+        }
     }
 }

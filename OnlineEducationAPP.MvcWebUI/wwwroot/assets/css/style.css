@@ -1,3 +1,7 @@
+.vjs-picture-in-picture-control {
+	display: none !important;
+}
+
 .chat-app-window{
 	height: calc(100% - 80px) !important;
 }
