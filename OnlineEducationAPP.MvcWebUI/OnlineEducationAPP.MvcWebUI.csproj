@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\home-page\img\team\" />
+    <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
