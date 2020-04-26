@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineEducationAPP.MvcWebUI.Identity;
+using OnlineEducationAPP.MvcWebUI.Models;
 using OnlineEducationAPP.MvcWebUI.Repository.Abstract;
 
 namespace OnlineEducationAPP.MvcWebUI.Controllers
@@ -33,11 +34,17 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             var users = userManager.Users.ToList();
             return View(users);
         }
-
+          
         public IActionResult ActiveStreams()
         {
             var streams = streamRepository.GetAll().Where(stream => stream.IsActive).ToList();
-            return View(streams);
+            var users = userManager.Users.ToList();
+            var model = new ActiveStreamViewModel
+            {
+                Streams = streams,
+                Users = users
+            };
+            return View(model);
         }
 
     }
