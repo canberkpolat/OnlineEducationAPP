@@ -5,77 +5,21 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 //Disable send button until connection is established
 document.getElementById("sendButton").disabled = true;
 
-connection.on("ReceiveMessage", function (imgUrl, date, message, isCurrentUser) {
+connection.on("ReceiveMessage", function (username, message) {
         var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        var encodedMsg = msg;
 
-    //    var elm = document.getElementById('messageList');
-    
+    var msgList = $('#chats');
 
-    //    var msg_time_send = document.createElement('span');
-    //    msg_time_send.className = "msg_time_send";
-    //    msg_time_send.appendChild(document.createTextNode(date));
-
-    //    var msg_cotainer_send = document.createElement('div')
-    //    msg_cotainer_send.className = "msg_cotainer_send";
-    //    msg_cotainer_send.appendChild(document.createTextNode(encodedMsg));
-    //    msg_cotainer_send.append(msg_time_send);
-
-    //    var innerImg = document.createElement('img');
-    //    innerImg.src = imgUrl;
-    //    innerImg.className = "rounded-circle user_img_msg"
-
-    //    var img_cont_msg = document.createElement('div');
-    //    img_cont_msg.className = "img_cont_msg";
-    //    img_cont_msg.append(innerImg);
+    var backgroundColor = intToRGB(hashCode(username));
+    var textColor = invertColor(backgroundColor);
 
 
-    //    var parentClass = document.createElement('div');
-    //    parentClass.className = "d-flex justify-content-end mb-4";
-    //    parentClass.append(msg_cotainer_send, img_cont_msg);
-
-    //    var li = document.getElementById('li');
-    //    li.append(parentClass);
-
-    //elm.append(li);
-
-    var elm = document.getElementById('messageList');
-
-  
-
-    var p = document.createElement('p');
-    p.appendChild(document.createTextNode(encodedMsg));
-
-    var chatContent = document.createElement('div');
-    chatContent.className = "chat-content";
-    chatContent.append(p);
-
-    var chatBody = document.createElement('div');
-    chatBody.className = "chat-body";
-    chatBody.append(chatContent);
-
-    var innerImg = document.createElement('img');
-    innerImg.src = imgUrl;
-    innerImg.alt = "avatar";
-
-    var avatar = document.createElement('a');
-    avatar.className = "avatar";
-    avatar.append(innerImg);
-
-    var chatAvatar = document.createElement('div');
-    chatAvatar.className = "chat-avatar";
-    chatAvatar.append(avatar);
-
-    var chat = document.getElementById('chat');
-    chat.append(chatAvatar, chatBody);
-
-    var li = document.getElementById('li');
-    li.append(chat);
-
-    elm.append(li);
-    
-   
-
+    msgList.append('\
+        <div class="chat chat-left">\
+            <div class="chat-body">\
+                <div class="chat-content" style="color: '+ textColor + '; background-color: ' + backgroundColor + ';">'+ username+ ': ' + msg + '</div>\
+            </div>\
+        </div>');
 });
 
 connection.start().then(function () {
@@ -85,10 +29,44 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    var user = document.getElementById("userInput").value;
     var message = document.getElementById("messageInput").value;
-    connection.invoke("SendMessage", user, message).catch(function (err) {
+    connection.invoke("SendMessage", message).catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();
 });
+
+function hashCode(str) { // java String#hashCode
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
+}
+
+function intToRGB(i) {
+    var c = (i & 0x00FFFFFF)
+        .toString(16)
+        .toUpperCase();
+
+    return "#"+("00000".substring(0, 6 - c.length) + c);
+}
+
+function invertColor(hex) {
+    if (hex.indexOf('#') === 0) {
+        hex = hex.slice(1);
+    }
+    // convert 3-digit hex to 6-digits.
+    if (hex.length === 3) {
+        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    if (hex.length !== 6) {
+        throw new Error('Invalid HEX color.');
+    }
+    var r = parseInt(hex.slice(0, 2), 16),
+        g = parseInt(hex.slice(2, 4), 16),
+        b = parseInt(hex.slice(4, 6), 16);
+    return (r * 0.299 + g * 0.587 + b * 0.114) > 186
+        ? '#000000'
+        : '#FFFFFF';
+}

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using OnlineEducationAPP.MvcWebUI.Identity;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace OnlineEducationAPP.MvcWebUI.Hubs
 {
+    [Authorize]
     public class ChatHub : Hub
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -21,15 +23,9 @@ namespace OnlineEducationAPP.MvcWebUI.Hubs
             userManager = _userManager;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task SendMessage(string user,string message)
+        public async Task SendMessage(string message)
         {
-            bool isCurrentUser = true;
-            if (_httpContextAccessor.HttpContext.User.Identity.Name != user)
-                isCurrentUser = false;
-            var currentUser = await userManager.FindByNameAsync(user);
-            var imgUrl = currentUser.ProfileImageUrl;
-            var date = DateTime.Now.ToLongTimeString();
-            await Clients.All.SendAsync("ReceiveMessage", imgUrl,date, message, isCurrentUser);
+            await Clients.All.SendAsync("ReceiveMessage", Context.User.Identity.Name, message);
         }
     }
 }
