@@ -17,11 +17,14 @@ namespace OnlineEducationAPP.MvcWebUI.Repository.Concrete.EntityFrameworkCore
         }
         private ICourseRepository courses;
         private ICategoryRepository categories;
+        private IStreamRepository streams;
 
 
         public ICourseRepository Courses => courses ?? (courses = new EfCourseRepository(context));
 
         public ICategoryRepository Categories => categories ?? (categories = new EfCategoryRepository(context));
+
+        public IStreamRepository Streams => streams ?? (streams = new EfStreamRepository(context));
 
 
 
