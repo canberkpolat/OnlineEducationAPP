@@ -45,7 +45,7 @@ namespace OnlineEducationAPP.MvcWebUI
             });
 
             services.AddDbContext<OnlineEducationDbContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("OnlineEducationAppConnection")));
+                options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("OnlineEducationAppConnection")));
             services.AddTransient<ICourseRepository, EfCourseRepository>();
             services.AddTransient<ICategoryRepository, EfCategoryRepository>();
             services.AddTransient<IStreamRepository, EfStreamRepository>();

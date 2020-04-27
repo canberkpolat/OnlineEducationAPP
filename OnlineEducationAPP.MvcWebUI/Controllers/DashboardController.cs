@@ -38,11 +38,10 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         public IActionResult ActiveStreams()
         {
             var streams = streamRepository.GetAll().Where(stream => stream.IsActive).ToList();
-            var users = userManager.Users.ToList();
+            //var users = userManager.Users.ToList();
             var model = new ActiveStreamViewModel
             {
-                Streams = streams,
-                Users = users
+                Streams = streams
             };
             return View(model);
         }

@@ -13,6 +13,6 @@ namespace OnlineEducationAPP.MvcWebUI.Identity
         public string Surname { get; set; }
         public string ProfileImageUrl { get; set; }
         public string CarouselImageUrl { get; set; }
-        public Stream Stream { get; set; }
+        public virtual ICollection<Stream> Stream { get; set; }
     }
 }

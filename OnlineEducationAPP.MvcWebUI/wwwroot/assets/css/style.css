@@ -17,3 +17,11 @@
 .chat-app-window, .chat-application, .chat-app-form {
 	background-color: #2C303B !important;
 }
+
+.stream-body{
+	width: 402px;
+}
+
+body{
+	background-color: #000 !important;
+}

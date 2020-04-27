@@ -11,8 +11,8 @@ namespace OnlineEducationAPP.MvcWebUI.Entity
         public string Name { get; set; }
         
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
 
-        public List<Stream> Streams { get; set; }
+        public virtual ICollection<Stream> Streams { get; set; }
     }
 }

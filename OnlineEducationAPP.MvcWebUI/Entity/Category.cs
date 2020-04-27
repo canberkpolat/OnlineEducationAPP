@@ -11,6 +11,6 @@ namespace OnlineEducationAPP.MvcWebUI.Entity
         public string Name { get; set; }
         public string Type { get; set; }
 
-        public List<Course> Courses { get; set; }
+        public virtual ICollection<Course> Courses { get; set; }
     }
 }

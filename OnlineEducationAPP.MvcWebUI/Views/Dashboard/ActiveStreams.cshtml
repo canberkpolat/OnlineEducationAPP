@@ -3,48 +3,30 @@
     ViewData["Title"] = "ActiveStreams";
 }
 
-<h1>ActiveStreams</h1>
-
-@if (Model == null)
-{
-    <h1>There is no active Stream Right Now.</h1>
-}
-else
-{
 
 
-    <div class="app-content container center-layout mt-2">
-        <div class="content-wrapper">
-            <section id="user-profile-cards-with-stats" class="row mt-2">
-                @foreach (var stream in Model.Streams)
+<div class="app-content container center-layout mt-2">
+    <div class="content-wrapper">
+        <section id="user-profile-cards-with-stats" class="row mt-2">
+            @foreach (var stream in Model.Streams)
+            {
+                if (stream.UserId != null)
                 {
-                    if (stream.UserId != null)
-                    {
-                        var user = @Model.Users.Where(t => t.Id == stream.UserId).First();
-
-                    <div class="col-xl-4 col-md-6 col-12">
+                    //var user = @Model.Users.Where(t => t.Id == stream.UserId).First();
+                    <a href="/Stream/@stream.Id">
                         <div class="card profile-card-with-stats">
-                            <div class="text-center">
-                                <div class="card-body">
-                                    <img src="@user.ProfileImageUrl" class="rounded-circle  height-150"
-                                         alt="Card image">
-                                    <br /><br />
-                                    Stream Name : <h2 class="bg-success">@stream.StreamName</h2>
-                                
-                                    <p>You are missing the class, hurry up. Join the stream before it is finished.
-                                        <h2>@user.Name @user.Surname</h2> is live Now. Join the stream.
-                                    </p>
-                                    <a type="button" href="/Stream/@stream.Id" class="btn btn-outline-danger btn-md mr-1"> JOIN</a>
-                                </div>
+                            <div class="card-body stream-body">
+                                <img src="@(stream.LiveStreamEndpoint+stream.StreamKey+".png")">
+                                <h2 class="text-bold-600">@stream.StreamName</h2>
+                                <h4 class="text-bold-200">@stream.User.Name @stream.User.Surname</h4>
+                                <h4 class="text-bold-200"><a>@stream.Course.Name</a> in <a href="/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
                             </div>
                         </div>
-                    </div>
-                    }
+                    </a>
                 }
-            </section>
-        </div>
+            }
+        </section>
     </div>
-
-}
+</div>
 
 

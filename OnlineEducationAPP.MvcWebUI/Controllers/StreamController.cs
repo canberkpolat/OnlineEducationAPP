@@ -46,8 +46,8 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 IsActive = false,
                 StreamName = streamName,
                 UserId = userID,
-                LiveStreamEndpoint = "https://onlineeducationapp.canberkpolat.com:8443/hls/"+ streamKey,
-                VideoOnDemandEndpoint = "rtmp://onlineeducationapp.canberkpolat.com:8080/vod/"+ streamKey+".flv",
+                LiveStreamEndpoint = "https://onlineeducationapp.canberkpolat.com:8443/hls/",
+                VideoOnDemandEndpoint = "https://onlineeducationapp.canberkpolat.com:8443/vod/",
                 StreamKey = streamKey
             };
             streamRepository.Add(model);
