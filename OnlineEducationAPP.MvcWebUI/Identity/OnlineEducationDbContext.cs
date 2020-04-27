@@ -24,9 +24,11 @@ namespace OnlineEducationAPP.MvcWebUI.Identity
         {
             base.OnModelCreating(builder);
             builder.Ignore<IdentityUserLogin<string>>();
-            builder.Entity<ApplicationUser>()
-                .HasMany(a => a.Stream)
-                .WithOne(b => b.User);
+
+            //builder.Entity<ApplicationUser>()
+            //    .HasMany(a => a.Stream)
+            //    .WithOne(b => b.User)
+            //    .HasForeignKey(s =>s.UserId);
 
             builder.Entity<Stream>()
                 .HasIndex(t => t.UserId)

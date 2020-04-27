@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineEducationAPP.MvcWebUI.Identity;
 using OnlineEducationAPP.MvcWebUI.Models;
 using OnlineEducationAPP.MvcWebUI.Repository.Abstract;
+using Microsoft.EntityFrameworkCore;
 
 namespace OnlineEducationAPP.MvcWebUI.Controllers
 {
@@ -37,7 +38,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
           
         public IActionResult ActiveStreams()
         {
-            var streams = streamRepository.GetAll().Where(stream => stream.IsActive).ToList();
+            var streams = streamRepository.GetAll().Include(t=>t.User).Include(t=>t.Course).Include(t=>t.Course.Category).Where(stream => stream.IsActive).ToList();
             //var users = userManager.Users.ToList();
             var model = new ActiveStreamViewModel
             {
