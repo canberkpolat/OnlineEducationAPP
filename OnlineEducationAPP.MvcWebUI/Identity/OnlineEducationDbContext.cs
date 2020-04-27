@@ -28,6 +28,10 @@ namespace OnlineEducationAPP.MvcWebUI.Identity
                 .HasOne(a => a.Stream)
                 .WithOne(b => b.User)
                 .HasForeignKey<Stream>(b => b.UserId);
+
+            builder.Entity<Stream>()
+                .HasIndex(t => t.UserId)
+                .IsUnique(false);
         }
     }
 }
