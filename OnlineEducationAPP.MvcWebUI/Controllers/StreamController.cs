@@ -16,11 +16,13 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
     {
         private IStreamRepository streamRepository;
         private IUnitOfWork unitOfWork;
+        private UserManager<ApplicationUser> userManager;
 
-        public StreamController(IUnitOfWork _unitOfWork, IStreamRepository _streamRepository)
+        public StreamController(IUnitOfWork _unitOfWork, IStreamRepository _streamRepository, UserManager<ApplicationUser> _userManager)
         {
             streamRepository = _streamRepository;
             unitOfWork = _unitOfWork;
+            userManager = _userManager;
         }
         public IActionResult Create()
         {
@@ -31,8 +33,10 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         }
         [Authorize(Roles = "Teacher")]
         [HttpPost]
-        public dynamic Create(int courseId, string streamName, string userId)
+        public dynamic Create(int courseId, string streamName)
         {
+            var userID = userManager.GetUserId(User);
+
             string streamKey = Guid.NewGuid().ToString();
 
             var model = new Stream
@@ -41,9 +45,9 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 StartTime = null,
                 IsActive = false,
                 StreamName = streamName,
-                UserId = userId,
-                LiveStreamEndpoint = "https://onlineeducationapp.canberkpolat.com/hls/"+ streamKey,
-                VideoOnDemandEndpoint = "https://onlineeducationapp.canberkpolat.com/vod/"+ streamKey,
+                UserId = userID,
+                LiveStreamEndpoint = "https://onlineeducationapp.canberkpolat.com:8443/hls/"+ streamKey,
+                VideoOnDemandEndpoint = "rtmp://onlineeducationapp.canberkpolat.com:8080/vod/"+ streamKey+".flv",
                 StreamKey = streamKey
             };
             streamRepository.Add(model);
@@ -51,7 +55,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
             var response = new
             {
-                StreamEndPoint = "https://onlineeducationapp.canberkpolat.com/live",
+                StreamEndPoint = "rmtp://onlineeducationapp.canberkpolat.com:8080/live",
                 StreamKey = streamKey
             };
 

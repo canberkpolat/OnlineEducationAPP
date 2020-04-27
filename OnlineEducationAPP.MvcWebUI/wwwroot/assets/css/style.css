@@ -5,3 +5,15 @@
 .chat-app-window{
 	height: calc(100% - 80px) !important;
 }
+
+.chat-content, .chat-body, .chat-left {
+	margin-left: 0px !important;
+}
+
+.chat-app-window {
+	padding-left: 0px !important;
+}
+
+.chat-app-window, .chat-application, .chat-app-form {
+	background-color: #2C303B !important;
+}
