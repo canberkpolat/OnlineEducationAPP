@@ -3,8 +3,6 @@
 <li class="dropdown nav-item mega-dropdown">
     <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="la la-columns"></i>Courses</a>
     <ul class="mega-dropdown-menu dropdown-menu row">
-
-
         @foreach (var category in Model.Categories)
         {
             <li class="col-md-auto">
@@ -16,7 +14,7 @@
                             {
                                 @if (category.Id == course.CategoryId)
                                 {
-                                    <p>@Html.ActionLink(course.Name, "Index", "Dashboard", new { course.Id }, null)</p>
+                                    <p>@Html.ActionLink(course.Name, "Course", "Dashboard", new { course.Id }, null)</p>
                                 }
 
                             }
@@ -25,7 +23,5 @@
                 </ul>
             </li>
         }
-
-
     </ul>
 </li>

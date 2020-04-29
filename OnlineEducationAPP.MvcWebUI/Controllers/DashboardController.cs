@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace OnlineEducationAPP.MvcWebUI.Controllers
 {
-    
+    [Authorize(Roles = "Student, Teacher")]
     public class DashboardController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -23,10 +23,8 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             userManager = _userManager;
         }
 
-        [Authorize(Roles = "Student, Teacher")]
         public IActionResult Index()
         {
-            
             return View();
         }
 
@@ -35,12 +33,17 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             var users = userManager.Users.ToList();
             return View(users);
         }
-          
+
         public IActionResult ActiveStreams()
         {
-            var streams = streamRepository.GetAll().Include(t=>t.User).Include(t=>t.Course).Include(t=>t.Course.Category).Where(stream => stream.IsActive).ToList();
+            var streams = streamRepository.GetAll().Include(t => t.User).Include(t => t.Course).Include(t => t.Course.Category).Where(stream => stream.IsActive).ToList();
             return View(streams);
         }
 
+        public IActionResult Course(int Id)
+        {
+            var streams = streamRepository.GetAll().Include(t => t.User).Include(t => t.Course).Include(t => t.Course.Category).Where(stream => stream.CourseId == Id).ToList();
+            return View(streams);
+        }
     }
 }

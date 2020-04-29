@@ -1,6 +1,5 @@
 ﻿@model Stream
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
     var VideoSrc = "";
     if (Model.IsActive)
     {
@@ -11,41 +10,37 @@
         VideoSrc = Model.VideoOnDemandEndpoint + Model.StreamKey + ".m3u8";
     }
 }
-<body class="horizontal-layout horizontal-menu horizontal-menu-padding menu-expanded"
-      data-open="click" data-menu="horizontal-menu">
-    <div class="app-content container-fluid">
-        <div class="row">
-            <div class="col-9 pl-0 pr-0">
-                <video id="player" class="video-js vjs-16-9 vjs-big-play-centered"
-                       controls
-                       preload="none"
-                       muted
-                       disablePictureInPicture
-                       data-setup="{}">
-                    <source src="@VideoSrc" type="application/x-mpegURL">
-                    <p class="vjs-no-js">
-                        To view this video please enable JavaScript, and consider upgrading to a
-                        web browser that
-                        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                    </p>
-                </video>
-            </div>
-            <div class="col-3 chat-application">
-                <section class="chat-app-window">
-                    <div class="chats" id="chats"></div>
-                </section>
-                <section class="chat-app-form">
-                    <form class="chat-app-input d-flex pl-0">
-                        <input id="messageInput" type="text" class="form-control pl-1 mw-100" style="width: 100%;" placeholder="Type your message">
-                        <button id="sendButton" type="button" class="btn btn-info ml-1">
-                            <span class="d-none d-lg-block">Send</span>
-                        </button>
-                    </form>
-                </section>
-            </div>
+<div class="app-content container-fluid">
+    <div class="row">
+        <div class="col-9 pl-0 pr-0">
+            <video id="player" class="video-js vjs-16-9 vjs-big-play-centered"
+                    controls
+                    preload="none"
+                    disablePictureInPicture
+                    data-setup="{}">
+                <source src="@VideoSrc" type="application/x-mpegURL">
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+            </video>
+        </div>
+        <div class="col-3 chat-application">
+            <section class="chat-app-window">
+                <div class="chats" id="chats"></div>
+            </section>
+            <section class="chat-app-form">
+                <form class="chat-app-input d-flex pl-0">
+                    <input id="messageInput" type="text" class="form-control pl-1 mw-100" style="width: 100%;" placeholder="Type your message">
+                    <button id="sendButton" type="button" class="btn btn-info ml-1">
+                        <span class="d-none d-lg-block">Send</span>
+                    </button>
+                </form>
+            </section>
         </div>
     </div>
-</body>
+</div>
 
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>

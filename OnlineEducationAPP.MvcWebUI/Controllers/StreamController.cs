@@ -11,22 +11,23 @@ using OnlineEducationAPP.MvcWebUI.Repository.Abstract;
 
 namespace OnlineEducationAPP.MvcWebUI.Controllers
 {
-
+    [Authorize(Roles = "Student,Teacher")]
     public class StreamController : Controller
     {
         private IStreamRepository streamRepository;
         private IUnitOfWork unitOfWork;
         private UserManager<ApplicationUser> userManager;
-
+        
         public StreamController(IUnitOfWork _unitOfWork, IStreamRepository _streamRepository, UserManager<ApplicationUser> _userManager)
         {
             streamRepository = _streamRepository;
             unitOfWork = _unitOfWork;
             userManager = _userManager;
         }
+        [Authorize(Roles = "Teacher")]
+        [Route("Stream/Create")]
         public IActionResult Create()
         {
-         
             var courses = unitOfWork.Courses.GetAll().ToList();
 
             return View(courses);
