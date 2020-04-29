@@ -29,7 +29,8 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    var message = document.getElementById("messageInput").value;
+    var message = $("#messageInput").val();
+    $("#messageInput").val('');
     connection.invoke("SendMessage", message).catch(function (err) {
         return console.error(err.toString());
     });

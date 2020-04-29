@@ -31,6 +31,14 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
             return View(courses);
         }
+
+        [Route("Stream/{Id}")]
+        public IActionResult Stream(int Id)
+        {
+            var stream = streamRepository.Get(Id);
+            return View(stream);
+        }
+
         [Authorize(Roles = "Teacher")]
         [HttpPost]
         public dynamic Create(int courseId, string streamName)
@@ -46,7 +54,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 IsActive = false,
                 StreamName = streamName,
                 UserId = userID,
-                LiveStreamEndpoint = "https://onlineeducationapp.canberkpolat.com:8443/hls/",
+                LiveStreamEndpoint = "https://onlineeducationapp.canberkpolat.com:8443/live/",
                 VideoOnDemandEndpoint = "https://onlineeducationapp.canberkpolat.com:8443/vod/",
                 StreamKey = streamKey
             };

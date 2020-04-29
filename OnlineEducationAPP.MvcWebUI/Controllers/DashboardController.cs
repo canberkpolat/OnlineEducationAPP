@@ -39,12 +39,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         public IActionResult ActiveStreams()
         {
             var streams = streamRepository.GetAll().Include(t=>t.User).Include(t=>t.Course).Include(t=>t.Course.Category).Where(stream => stream.IsActive).ToList();
-            //var users = userManager.Users.ToList();
-            var model = new ActiveStreamViewModel
-            {
-                Streams = streams
-            };
-            return View(model);
+            return View(streams);
         }
 
     }

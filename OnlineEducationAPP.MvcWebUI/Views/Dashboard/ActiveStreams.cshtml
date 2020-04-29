@@ -1,4 +1,4 @@
-﻿@model ActiveStreamViewModel
+﻿@model ICollection<Stream>
 @{
     ViewData["Title"] = "ActiveStreams";
 }
@@ -8,25 +8,34 @@
 <div class="app-content container center-layout mt-2">
     <div class="content-wrapper">
         <section id="user-profile-cards-with-stats" class="row mt-2">
-            @foreach (var stream in Model.Streams)
+            @foreach (var stream in Model)
             {
-                if (stream.UserId != null)
-                {
-                    //var user = @Model.Users.Where(t => t.Id == stream.UserId).First();
+            <div class="profile-card-with-stats stream-container">
+                <div class="live-tag-container">
+                    <div class="live-tag">
+                        <div class="live-tag-text text-bold-600">LIVE</div>
+                    </div>
+                </div>
+                <div class="stream-body">
                     <a href="/Stream/@stream.Id">
-                        <div class="card profile-card-with-stats">
-                            <div class="card-body stream-body">
-                                <img src="@(stream.LiveStreamEndpoint+stream.StreamKey+".png")">
-                                <h2 class="text-bold-600">@stream.StreamName</h2>
-                                <h4 class="text-bold-200">@stream.User.Name @stream.User.Surname</h4>
-                                <h4 class="text-bold-200"><a>@stream.Course.Name</a> in <a href="/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
-                            </div>
-                        </div>
+                        <img class="backup_picture" src="@(stream.LiveStreamEndpoint+stream.StreamKey+".png")">
                     </a>
-                }
+                    <a href="/Stream/@stream.Id">
+                        <h2 class="text-bold-600 white-text">@stream.StreamName</h2>
+                        <h4 class="text-bold-200 gray-text">@stream.User.Name @stream.User.Surname</h4>
+                    </a>
+                    <h4 class="text-bold-200 gray-text"><a href="/Course/@stream.Course.Id">@stream.Course.Name</a> in <a href="/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
+                </div>
+
+            </div>
             }
         </section>
     </div>
 </div>
 
 
+<script type="text/javascript">
+    $(".backup_picture").on("error", function () {
+        $(this).attr('src', '/images/no-thumbnail.jpg');
+    });
+</script>

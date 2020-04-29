@@ -19,9 +19,89 @@
 }
 
 .stream-body{
-	width: 402px;
+	width: 360px;
 }
 
-body{
+.stream-container {
+	margin-bottom: 20px !important;
+	border-bottom: double 2px #FFF;
+}
+
+@media (min-width:1200px) {
+	.stream-container {
+		padding-right: 20px !important;
+		margin-bottom: 20px !important;
+		border-bottom: double 2px #FFF;
+	}
+		.stream-container:nth-child(3n) {
+			padding-right: 0px !important;
+		}
+}
+
+body {
 	background-color: #000 !important;
+}
+
+.white-text {
+	color: #FFF;
+}
+
+.gray-text {
+	color: #CCC;
+}
+
+h1, h2, h3, h4, h5, h6, .dropdown-item {
+	color: #FFF;
+}
+
+.dropdown-menu {
+	background-color: #2c303b;
+	padding: 0px !important;
+	border: 1px solid #000 !important;
+}
+
+.dropdown-header {
+	color: #BFBFD8 !important;
+}
+
+.dropdown-divider{
+	margin: 0px !important;
+}
+
+.dropdown-item {
+	padding-top: 20px !important;
+	padding-bottom: 20px !important;
+}
+
+.live-tag-container{
+	position: relative;
+}
+
+.live-tag {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-color: #e91916;
+}
+
+.live-tag-text {
+	padding-left: .5rem;
+	padding-right: .5rem;
+	color: #FFF;
+}
+
+.text-muted {
+	color: #9E9FB5 !important;
+}
+
+.brand-text, .card-title {
+	color: #464855;
+}
+
+.bs-callout-success {
+	display: block;
+	border-color: #28D094 !important;
+	background-color: #acefd7;
+	border-radius: 0.25rem;
+	color: black;
 }

@@ -9,8 +9,8 @@
             <div class="row match-height">
                 <div class="col-md-12">
                     <div class="card" style="margin-top: 100px">
-                        <div class="card-header">
-                            <h1 class="card-title">Broadcast Form</h1>
+                        <div class="card-header" id="card-header">
+                            <h1 class="card-title">Start new Broadcast</h1>
                             <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                         </div>
                         <div class="card-content collapse show">
@@ -37,10 +37,22 @@
                                     </div>
                                     <div class="form-actions center">
                                         <button id="btnSubmit" type="submit" class="btn btn-primary">
-                                            <i class="la la-check-square-o"></i> Save
+                                            <i class="la la-check-square-o"></i> Create
                                         </button>
                                     </div>
                                 </form>
+                                <div class="row" id="resultView" style="display: none;">
+                                    <div class="col-md-12">
+                                        <div class="bs-callout-success callout-border-left mt-1 p-1">
+                                            <strong>Success!</strong>
+                                            <p>
+                                                You can begin streaming now.
+                                            </p>
+                                            <strong>Endpoint:</strong> <div id="endpoint"></div>
+                                            <strong>Stream Key:</strong> <div id="streamKey"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,7 +75,11 @@
                             data: { 'courseId': courseId, 'streamName': streamName, 'userId': userId },
                             cache: false,
                             success: function (data) {
-                                alert("posted");
+                                $('#streamForm').hide();
+                                $('#card-header').hide();
+                                $('#resultView').show();
+                                $('#endpoint').html(data.streamEndPoint);
+                                $('#streamKey').html(data.streamKey);
                             }
 
                         });
