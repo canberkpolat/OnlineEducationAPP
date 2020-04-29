@@ -11,7 +11,6 @@ using OnlineEducationAPP.MvcWebUI.Repository.Abstract;
 
 namespace OnlineEducationAPP.MvcWebUI.Controllers
 {
-    [Authorize(Roles = "Student,Teacher")]
     public class StreamController : Controller
     {
         private IStreamRepository streamRepository;
@@ -26,6 +25,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         }
         [Authorize(Roles = "Teacher")]
         [Route("Stream/Create")]
+        [HttpGet]
         public IActionResult Create()
         {
             var courses = unitOfWork.Courses.GetAll().ToList();
@@ -33,11 +33,12 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             return View(courses);
         }
 
+        [Authorize(Roles = "Student,Teacher")]
         [Route("Stream/{Id}")]
+        [HttpGet]
         public IActionResult Stream(int Id)
         {
             var stream = streamRepository.Get(Id);
-            var a = streamRepository.Get(21);
             return View(stream);
         }
 

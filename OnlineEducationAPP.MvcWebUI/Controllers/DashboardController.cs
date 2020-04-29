@@ -25,7 +25,8 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var streams = streamRepository.GetAll().OrderByDescending(p => p.Id).Take(15).ToList();
+            return View(streams);
         }
 
         public IActionResult UserCards()
@@ -42,8 +43,14 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
         public IActionResult Course(int Id)
         {
-            var streams = streamRepository.GetAll().Include(t => t.User).Include(t => t.Course).Include(t => t.Course.Category).Where(stream => stream.CourseId == Id).ToList();
+            var streams = streamRepository.GetAll().Where(stream => stream.CourseId == Id).ToList();
             return View(streams);
+        }
+
+        public IActionResult Category(int Id)
+        {
+            var streams = streamRepository.GetAll().Where(stream => stream.Course.CategoryId == Id).ToList();
+            return View("Course",streams);
         }
     }
 }

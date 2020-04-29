@@ -21,7 +21,7 @@
                             <h2 class="text-bold-600 white-text">@stream.StreamName</h2>
                             <h4 class="text-bold-200 gray-text">@stream.User.Name @stream.User.Surname</h4>
                         </a>
-                        <h4 class="text-bold-200 gray-text"><a href="/Course/@stream.Course.Id">@stream.Course.Name</a> in <a href="/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
+                        <h4 class="text-bold-200 gray-text"><a href="/Dashboard/Course/@stream.Course.Id">@stream.Course.Name</a> in <a href="/Dashboard/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
                     </div>
 
                 </div>
@@ -33,13 +33,13 @@
                 <div class="profile-card-with-stats stream-container">
                     <div class="stream-body">
                         <a href="/Stream/@stream.Id">
-                            <img class="backup_picture" src="@(stream.LiveStreamEndpoint+stream.StreamKey+".png")">
+                            <img class="backup_picture" src="@(stream.VideoOnDemandEndpoint+stream.StreamKey+".png")">
                         </a>
                         <a href="/Stream/@stream.Id">
                             <h2 class="text-bold-600 white-text">@stream.StreamName</h2>
                             <h4 class="text-bold-200 gray-text">@stream.User.Name @stream.User.Surname</h4>
                         </a>
-                        <h4 class="text-bold-200 gray-text"><a href="/Course/@stream.Course.Id">@stream.Course.Name</a> in <a href="/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
+                        <h4 class="text-bold-200 gray-text"><a href="/Dashboard/Course/@stream.Course.Id">@stream.Course.Name</a> in <a href="/Dashboard/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
                     </div>
 
                 </div>

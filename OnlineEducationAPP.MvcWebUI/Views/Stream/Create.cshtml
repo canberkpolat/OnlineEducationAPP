@@ -75,6 +75,7 @@
                         data: { 'courseId': courseId, 'streamName': streamName, 'userId': userId },
                         cache: false,
                         success: function (data) {
+                            console.log(data);
                             $('#streamForm').hide();
                             $('#card-header').hide();
                             $('#resultView').show();
