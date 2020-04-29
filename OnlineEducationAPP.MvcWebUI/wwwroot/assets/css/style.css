@@ -15,10 +15,22 @@
 }
 
 .chat-app-window, .chat-application, .chat-app-form {
-	background-color: #2C303B !important;
+	/*background-color: #2C303B !important;*/
 }
 
-.stream-body{
+.chat-app-window, .chat-application, .chat-app-form, .vjs-control-bar {
+	background-color: #18181b !important;
+}
+
+body, .video-js {
+	background-color: #0e0e10 !important;
+}
+
+.navbar-dark.navbar-horizontal, .dropdown-menu {
+	background-color: #1f1f23 !important;
+}
+
+.stream-body {
 	width: 360px;
 }
 
@@ -38,10 +50,6 @@
 		}
 }
 
-body {
-	background-color: #000 !important;
-}
-
 .white-text {
 	color: #FFF;
 }
@@ -55,9 +63,8 @@ h1, h2, h3, h4, h5, h6, .dropdown-item {
 }
 
 .dropdown-menu {
-	background-color: #2c303b;
 	padding: 0px !important;
-	border: 1px solid #000 !important;
+	border: 1px solid #0e0e10 !important;
 }
 
 .dropdown-header {
