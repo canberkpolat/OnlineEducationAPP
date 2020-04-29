@@ -12,6 +12,7 @@ namespace OnlineEducationAPP.MvcWebUI.Repository.Concrete.EntityFrameworkCore
     public class EfGenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly DbContext context;
+
         public EfGenericRepository(DbContext _context)
         {
             context = _context;

@@ -37,6 +37,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         public IActionResult Stream(int Id)
         {
             var stream = streamRepository.Get(Id);
+            var a = streamRepository.Get(21);
             return View(stream);
         }
 
