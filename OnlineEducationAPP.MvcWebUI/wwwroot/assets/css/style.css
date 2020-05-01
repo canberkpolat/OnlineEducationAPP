@@ -18,25 +18,47 @@
 	/*background-color: #2C303B !important;*/
 }
 
-.chat-app-window, .chat-application, .chat-app-form, .vjs-control-bar {
+/*.chat-app-window, .chat-application, .chat-app-form, .vjs-control-bar {
 	background-color: #18181b !important;
-}
-
-body, .video-js {
-	background-color: #0e0e10 !important;
 }
 
 .navbar-dark.navbar-horizontal, .dropdown-menu {
 	background-color: #1f1f23 !important;
 }
+*/
+.dropdown-menu {
+	background-color: #FFF !important;
+}
+
+body {
+	background-color: #FFF !important;
+}
 
 .stream-body {
 	width: 360px;
+	background-color: transparent !important;
 }
+/*2C303B*/
 
 .stream-container {
+	background-color: transparent !important;
 	margin-bottom: 20px !important;
 	border-bottom: double 2px #FFF;
+	box-shadow: none !important;
+}
+
+.gravatar-container{
+	display: flex;
+}
+
+.avatar {
+	height: 48px !important;
+	width: 48px !important;
+	margin-right: 5px;
+}
+
+.card-body{
+	padding-left: 0px !important;
 }
 
 @media (min-width:1200px) {
@@ -45,11 +67,20 @@ body, .video-js {
 		margin-bottom: 20px !important;
 		border-bottom: double 2px #FFF;
 	}
-		.stream-container:nth-child(3n) {
-			padding-right: 0px !important;
-		}
+	.stream-container:nth-child(3n) {
+		padding-right: 0px !important;
+	}
 }
 
+.stream-container a {
+	color: #050505 !important;
+	font-weight: bold;
+}
+
+.stream-container a:hover {
+	color: #5a5a5a !important;
+}
+/*
 .white-text {
 	color: #FFF;
 }
@@ -60,16 +91,21 @@ body, .video-js {
 
 h1, h2, h3, h4, h5, h6, .dropdown-item {
 	color: #FFF;
+}*/
+/*.dropdown-header {
+	color: #BFBFD8 !important;
+}*/
+/*.text-muted {
+	color: #9E9FB5 !important;
 }
 
-.dropdown-menu {
+.brand-text, .card-title {
+	color: #464855;
+}*/
+/*.dropdown-menu {
 	padding: 0px !important;
 	border: 1px solid #0e0e10 !important;
-}
-
-.dropdown-header {
-	color: #BFBFD8 !important;
-}
+}*/
 
 .dropdown-divider{
 	margin: 0px !important;
@@ -97,12 +133,12 @@ h1, h2, h3, h4, h5, h6, .dropdown-item {
 	color: #FFF;
 }
 
-.text-muted {
-	color: #9E9FB5 !important;
+.nav-link {
+	padding: 1.3rem 1.3rem !important;
 }
 
-.brand-text, .card-title {
-	color: #464855;
+.header-navbar {
+	min-height: 4rem !important;
 }
 
 .bs-callout-success {
@@ -111,12 +147,4 @@ h1, h2, h3, h4, h5, h6, .dropdown-item {
 	background-color: #acefd7;
 	border-radius: 0.25rem;
 	color: black;
-}
-
-.nav-link {
-	padding: 1.3rem 1.3rem !important;
-}
-
-.header-navbar {
-	min-height: 4rem !important;
 }

@@ -36,7 +36,7 @@
                                     </div>
                                 </div>
                                 <div class="form-actions center">
-                                    <button id="btnSubmit" type="submit" class="btn btn-primary">
+                                    <button id="btnSubmit" type="submit" class="btn btn-dark">
                                         <i class="la la-check-square-o"></i> Create
                                     </button>
                                 </div>
@@ -75,14 +75,12 @@
                         data: { 'courseId': courseId, 'streamName': streamName, 'userId': userId },
                         cache: false,
                         success: function (data) {
-                            console.log(data);
                             $('#streamForm').hide();
                             $('#card-header').hide();
                             $('#resultView').show();
                             $('#endpoint').html(data.streamEndPoint);
                             $('#streamKey').html(data.streamKey);
                         }
-
                     });
                     e.preventDefault();
                 });

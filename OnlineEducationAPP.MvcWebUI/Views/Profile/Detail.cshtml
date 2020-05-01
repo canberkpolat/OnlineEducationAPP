@@ -81,13 +81,6 @@ ViewData["Title"] = "Detail";
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-md-3 label-control" for="projectinput4">User Name</label>
-                                                    <div class="col-md-9">
-                                                        <input asp-for="UserName" class="form-control" placeholder="User Name">
-                                                        <span asp-validation-for="UserName" class="text-danger"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
                                                     <label class="col-md-3 label-control">Change Profile Picture</label>
                                                     <div class="col-md-9">
                                                         <label class="file center-block">
@@ -95,20 +88,9 @@ ViewData["Title"] = "Detail";
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="form-group row last">
-                                                    <label class="col-md-3 label-control">Change Profile Picture</label>
-                                                    <div class="col-md-9">
-                                                        <label class="file center-block">
-                                                            <input asp-for="CarouselPhoto" type="file">
-                                                        </label>
-                                                    </div>
-                                                </div>
                                             </div>
                                             <div class="form-actions" style="text-align:center;">
-                                                <a type="button" href="/Dashboard/Index" class="btn btn-warning mr-1">
-                                                    <i class="ft-x"></i> Cancel
-                                                </a>
-                                                <button type="submit" class="btn btn-primary">
+                                                <button type="submit" class="btn btn-dark">
                                                     <i class="la la-check-square-o"></i> Save
                                                 </button>
                                             </div>

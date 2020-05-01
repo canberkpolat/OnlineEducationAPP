@@ -4,8 +4,14 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using OnlineEducationAPP.MvcWebUI.Controllers;
+using OnlineEducationAPP.MvcWebUI.Identity;
 
 /// <summary>
 /// Globally Recognised Avatar - http://gravatar.com
@@ -13,7 +19,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 public static class GravatarHtmlHelper
 {
-
     /// <summary>
     /// In addition to allowing you to use your own image, Gravatar has a number of built in options which you can also use as defaults. Most of these work by taking the requested email hash and using it to generate a themed image that is unique to that email address
     /// </summary>
@@ -73,8 +78,9 @@ public static class GravatarHtmlHelper
     /// <param name="forceDefaultImage">Prefer the default image over the users own Gravatar</param>
     /// <param name="rating">Gravatar content rating (note that Gravatars are self-rated)</param>
     /// <param name="forceSecureRequest">Always do secure (https) requests</param>
-    public static IHtmlContent GravatarImage(
+    public static async Task<IHtmlContent> GravatarImage(
       this IHtmlHelper htmlHelper,
+      UserManager<ApplicationUser> _userManager,
       string emailAddress,
       int size = 80,
       DefaultImage defaultImage = DefaultImage.Default,
@@ -85,13 +91,11 @@ public static class GravatarHtmlHelper
       string cssClass = "gravatar",
       string alt = "Gravatar image")
     {
-
-        var imgTag = new TagBuilder("img");
-
-        emailAddress = string.IsNullOrEmpty(emailAddress) ? string.Empty : emailAddress.Trim().ToLower();
-
-        imgTag.Attributes.Add("src",
-            string.Format("{0}://{1}.gravatar.com/avatar/{2}?s={3}{4}{5}{6}",
+        var user = await _userManager.FindByEmailAsync(emailAddress);
+        string imageSrc = "";
+        if (user.ProfileImageUrl.Contains("default"))
+        {
+            imageSrc = string.Format("{0}://{1}.gravatar.com/avatar/{2}?s={3}{4}{5}{6}",
                 htmlHelper.ViewContext.HttpContext.Request.IsHttps || forceSecureRequest ? "https" : "http",
                 htmlHelper.ViewContext.HttpContext.Request.IsHttps || forceSecureRequest ? "secure" : "www",
                 GetMd5Hash(emailAddress),
@@ -99,7 +103,18 @@ public static class GravatarHtmlHelper
                 "&d=" + (!string.IsNullOrEmpty(defaultImageUrl) ? htmlHelper.UrlEncoder.Encode(defaultImageUrl) : defaultImage.GetDescription()),
                 forceDefaultImage ? "&f=y" : "",
                 "&r=" + rating.GetDescription()
-                )
+                );
+        }
+        else
+        {
+            imageSrc = user.ProfileImageUrl;
+        }
+        var imgTag = new TagBuilder("img");
+
+        emailAddress = string.IsNullOrEmpty(emailAddress) ? string.Empty : emailAddress.Trim().ToLower();
+
+        imgTag.Attributes.Add("src",
+            imageSrc
             );
 
         imgTag.Attributes.Add("class", cssClass);

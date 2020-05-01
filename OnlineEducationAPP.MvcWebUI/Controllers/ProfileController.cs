@@ -52,11 +52,8 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 user.Name = model.Name;
                 user.Surname = model.Surname;
                 user.Email = model.Email;
-                user.UserName = model.UserName;
                 if(model.ProfilePhoto !=null)
-                    user.ProfileImageUrl = ProcessUploadFile(model)[0];
-                if(model.CarouselPhoto != null)
-                    user.CarouselImageUrl = ProcessUploadFile(model)[1];
+                    user.ProfileImageUrl = ProcessUploadFile(model);
 
                 await _userManager.UpdateAsync(user);
 
@@ -64,26 +61,16 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             return RedirectToAction("Index","Dashboard");
         }
 
-        private string[] ProcessUploadFile(UserEditViewModel model)
+        private string ProcessUploadFile(UserEditViewModel model)
         {
-            string[] result = new string[2];
-            string uniqueFileName = null;
+            string result = null;
             if (model.ProfilePhoto != null)
             {
                 var uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath + "\\app-assets\\images\\backgrounds");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ProfilePhoto.FileName;
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ProfilePhoto.FileName;
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 model.ProfilePhoto.CopyTo(new FileStream(filePath, FileMode.Create));
-                result[0] = "/app-assets/images/backgrounds/" + uniqueFileName;
-            }
-            uniqueFileName = null;
-            if (model.CarouselPhoto != null)
-            {
-                var uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath + "\\app-assets\\images\\backgrounds");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.CarouselPhoto.FileName;
-                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                model.CarouselPhoto.CopyTo(new FileStream(filePath, FileMode.Create));
-                result[1] = "/app-assets/images/backgrounds/" + uniqueFileName;
+                result = "/app-assets/images/backgrounds/" + uniqueFileName;
             }
             return result;
         }
