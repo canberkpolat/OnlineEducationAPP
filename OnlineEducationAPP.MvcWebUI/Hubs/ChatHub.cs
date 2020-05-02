@@ -15,17 +15,19 @@ namespace OnlineEducationAPP.MvcWebUI.Hubs
     [Authorize]
     public class ChatHub : Hub
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly UserManager<ApplicationUser> userManager;
  
-        public ChatHub(UserManager<ApplicationUser> _userManager, IHttpContextAccessor httpContextAccessor)
-        {
-            userManager = _userManager;
-            _httpContextAccessor = httpContextAccessor;
-        }
-        public async Task SendMessage(string message)
-        {
-            await Clients.All.SendAsync("ReceiveMessage", Context.User.Identity.Name, message);
-        }
+        //public ChatHub(UserManager<ApplicationUser> _userManager)
+        //{
+        //    userManager = _userManager;
+        //}
+
+        public string GetConnectionId() => Context.ConnectionId;
+
+
+        //public async Task SendMessage(string message)
+        //{
+        //    await Clients.All.SendAsync("ReceiveMessage", Context.User.Identity.Name, message);
+        //}
     }
 }
