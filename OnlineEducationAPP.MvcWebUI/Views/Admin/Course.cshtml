@@ -1,0 +1,56 @@
+﻿@model List<Course>
+
+@{
+    ViewData["Title"] = "Course";
+}
+
+<div class="app-content container center-layout mt-2">
+    <div class="content-wrapper">
+        <div class="content-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Courses</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><button class="btn-primary btn-lg">Edit Users</button></li>
+                                </ul>
+
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Category Name</th>
+                                                <th>Course Name</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var course in Model)
+                                            {
+                                                <tr>
+                                                    <th scope="row">@course.Id</th>
+                                                    <td>@course.Category.Name</td>
+                                                    <td>@course.Name</td>
+                                                    <td><button class="round btn-danger"><i class="ft-trash-2"></i> Delete</button></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
