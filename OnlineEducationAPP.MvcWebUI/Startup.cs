@@ -114,7 +114,8 @@ namespace OnlineEducationAPP.MvcWebUI
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ChatHub>("/chatHub");
+                routes.MapHub<ChatHub>("/chatHub/24");
+                routes.MapHub<ChatHub>("/chatHub/22");
             });
 
             app.UseMvc(routes =>

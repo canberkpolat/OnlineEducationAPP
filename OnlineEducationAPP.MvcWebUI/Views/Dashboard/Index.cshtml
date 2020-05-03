@@ -8,23 +8,27 @@
         <section id="user-profile-cards-with-stats" class="row mt-2">
             @foreach (var stream in Model.Where(p => p.IsActive == true))
             {
-            <div class="profile-card-with-stats stream-container">
+            <div class="card profile-card-with-stats stream-container">
                 <div class="live-tag-container">
                     <div class="live-tag">
                         <div class="live-tag-text text-bold-600">LIVE</div>
                     </div>
                 </div>
-                <div class="stream-body">
+                <div class="card-content stream-body">
                     <a href="/Stream/@stream.Id">
-                        <img class="backup_picture" src="@(stream.LiveStreamEndpoint+stream.StreamKey+".png")">
+                        <img class="card-img-top img-fluid backup_picture" src="@(stream.LiveStreamEndpoint+stream.StreamKey+".png")">
                     </a>
-                    <a href="/Stream/@stream.Id">
-                        <h2 class="text-bold-600">@stream.StreamName</h2>
-                        <h4 class="text-bold-200">@stream.User.Name @stream.User.Surname</h4>
-                    </a>
-                    <h4 class="text-bold-200 gray-text"><a href="/Dashboard/Course/@stream.Course.Id">@stream.Course.Name</a> in <a href="/Dashboard/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
+                    <div class="card-body">
+                        <div class="gravatar-container">
+                            @await Html.GravatarImage(UserManager, stream.User.Email,size: 48,defaultImage: GravatarHtmlHelper.DefaultImage.Identicon,rating: GravatarHtmlHelper.Rating.PG,cssClass: "avatar gravatar")
+                            <div>
+                                <a href="/Stream/@stream.Id"><h2 class="text-bold-600">@stream.StreamName</h2></a>
+                                <a href="/Stream/@stream.Id"><h4 class="text-bold-200">@stream.User.Name @stream.User.Surname</h4></a>
+                                <h4 class="text-bold-200 gray-text"><a href="/Dashboard/Course/@stream.Course.Id">@stream.Course.Name</a> in <a href="/Dashboard/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
             </div>
             }
         </section>
@@ -47,7 +51,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             }
         </section>
