@@ -47,7 +47,7 @@ body {
 	box-shadow: none !important;
 }
 
-.gravatar-container{
+.gravatar-container, .inline-form{
 	display: flex;
 }
 
