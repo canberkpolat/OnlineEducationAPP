@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace OnlineEducationAPP.MvcWebUI.Controllers
 {
-    [Authorize(Roles = "Student, Teacher")]
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
