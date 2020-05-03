@@ -1,12 +1,13 @@
 ﻿"use strict";
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub/" + streamID).build();
-
+var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+var _connectionId = '';
+var roomName = $('#room-name').val();
 //Disable send button until connection is established
 $("#sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (username, message) {
-        var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
     var msgList = $('#chats');
 
@@ -17,23 +18,61 @@ connection.on("ReceiveMessage", function (username, message) {
     msgList.append('\
         <div class="chat chat-left">\
             <div class="chat-body">\
-                <div class="chat-content" style="color: '+ textColor + '; background-color: ' + backgroundColor + ';">'+ username+ ': ' + msg + '</div>\
+                <div class="chat-content" style="color: '+ textColor + '; background-color: ' + backgroundColor + ';">' + username + ': ' + msg + '</div>\
             </div>\
         </div>');
 });
 
+var joinRoom = function () {
+
+    var url = '/Chat/JoinRoom/' + _connectionId + '/' + roomName;
+    axios.post(url, null)
+        .then(res => {
+            console.log("Room Joined", res);
+        })
+        .catch(err => {
+            console.error("Failed to join Room", err);
+        })
+}
+
 connection.start().then(function () {
+    connection.invoke('getConnectionId').then(function (connectionId) {
+        _connectionId = connectionId;
+        joinRoom();
+    })
     $("#sendButton").disabled = false;
 }).catch(function (err) {
     return console.error(err.toString());
 });
 
+
+var input = document.getElementById("messageInput");
+input.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("sendButton").click();
+    }
+});
 $("#sendButton").on("click", function () {
+
     var message = $("#messageInput").val();
     $("#messageInput").val('');
-    connection.invoke("SendMessage", message).catch(function (err) {
-        return console.error(err.toString());
-    });
+    axios.post('/Chat/SendMessage', null, {
+        params: {
+            message,
+            roomName
+        }
+    })
+        .then(res => {
+            console.log("Message Sent", res);
+        })
+        .catch(err => {
+            console.log("Failed to Sent Messages", err);
+        })
+
+    //connection.invoke("SendMessage", message).catch(function (err) {
+    //    return console.error(err.toString());
+    //});
     event.preventDefault();
 });
 
@@ -50,7 +89,7 @@ function intToRGB(i) {
         .toString(16)
         .toUpperCase();
 
-    return "#"+("00000".substring(0, 6 - c.length) + c);
+    return "#" + ("00000".substring(0, 6 - c.length) + c);
 }
 
 function invertColor(hex) {

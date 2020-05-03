@@ -15,6 +15,8 @@ using OnlineEducationAPP.MvcWebUI.Identity;
 using OnlineEducationAPP.MvcWebUI.Repository.Abstract;
 using OnlineEducationAPP.MvcWebUI.Repository.Concrete.EntityFrameworkCore;
 using OnlineEducationAPP.MvcWebUI.Hubs;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace OnlineEducationAPP.MvcWebUI
 {
@@ -78,7 +80,7 @@ namespace OnlineEducationAPP.MvcWebUI
                 //Token Settings
                 options.Tokens.AuthenticatorTokenProvider = "Name of AuthenticatorTokenProvider";
 
-            })  
+            })
                 .AddEntityFrameworkStores<OnlineEducationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -86,7 +88,7 @@ namespace OnlineEducationAPP.MvcWebUI
             //Cookie Settings
             services.ConfigureApplicationCookie(options =>
             {
-                options.Cookie.Expiration = TimeSpan.FromDays   (1);
+                options.Cookie.Expiration = TimeSpan.FromDays(1);
                 options.Cookie.HttpOnly = true;
                 options.LoginPath = "/Account/Login";
                 options.LogoutPath = "/Account/Logout";
@@ -109,7 +111,9 @@ namespace OnlineEducationAPP.MvcWebUI
                 app.UseDeveloperExceptionPage();
             }
             app.UseStatusCodePages();
+            //wwwroot
             app.UseStaticFiles();
+
             app.UseAuthentication();
 
             app.UseSignalR(routes =>
@@ -124,10 +128,8 @@ namespace OnlineEducationAPP.MvcWebUI
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-
-            //InitializeHelper.Initial(roleManager).GetAwaiter().GetResult();  // Migration yapmaya engel oluyor,
         }
+
 
     }
 }
