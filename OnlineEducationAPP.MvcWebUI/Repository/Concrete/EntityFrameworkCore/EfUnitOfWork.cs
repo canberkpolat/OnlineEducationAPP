@@ -18,6 +18,7 @@ namespace OnlineEducationAPP.MvcWebUI.Repository.Concrete.EntityFrameworkCore
         private ICourseRepository courses;
         private ICategoryRepository categories;
         private IStreamRepository streams;
+        private IUserRepository users;
 
 
         public ICourseRepository Courses => courses ?? (courses = new EfCourseRepository(context));
@@ -25,6 +26,7 @@ namespace OnlineEducationAPP.MvcWebUI.Repository.Concrete.EntityFrameworkCore
         public ICategoryRepository Categories => categories ?? (categories = new EfCategoryRepository(context));
 
         public IStreamRepository Streams => streams ?? (streams = new EfStreamRepository(context));
+        public IUserRepository Users => users ?? (users = new EfUserRepository(context));
 
 
 

@@ -3,7 +3,21 @@
 @{
     ViewData["Title"] = "Course";
 }
-
+<style>
+    #usersBtn,#categoryBtn{
+        padding:8px;
+        border-radius:12px
+    }
+    #addCourse{
+        top: 45px;
+        left:18px;
+        padding:8px;
+        position: absolute;
+        margin-top:7px;
+        border-radius:12px
+    }
+   
+</style>
 <div class="app-content container center-layout mt-2">
     <div class="content-wrapper">
         <div class="content-body">
@@ -12,16 +26,19 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Courses</h4>
+                              <a id="addCourse" asp-action="AddCourse" class="btn-primary"><i class="ft-plus-circle">&nbsp;</i>New Course</a>
                             <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
                                 <ul class="list-inline mb-0">
-                                    <li><button class="btn-primary btn-lg">Edit Users</button></li>
+                                    <li><a id="usersBtn" asp-action="Users" class="btn-primary btn-lg">Go To Users</a></li>
+                                    <li><a id="categoryBtn" asp-action="Categories" class="btn-primary btn-lg">Go To Categories</a></li>
                                 </ul>
+                               
 
                             </div>
                         </div>
                         <div class="card-content collapse show">
-                            <div class="card-body">
+                            <div class="card-body" style="padding-top:38px;">
 
                                 <div class="table-responsive">
                                     <table class="table mb-0">
@@ -36,11 +53,18 @@
                                         <tbody>
                                             @foreach (var course in Model)
                                             {
-                                                <tr>
+                                                <tr id="row_@course.Id">
                                                     <th scope="row">@course.Id</th>
                                                     <td>@course.Category.Name</td>
                                                     <td>@course.Name</td>
-                                                    <td><button class="round btn-danger"><i class="ft-trash-2"></i> Delete</button></td>
+                                                    <td>
+                                                        <form asp-action="DeleteCourseById" asp-route-id="@course.Id">
+                                                            <button type="submit" class="btn btn-danger">
+                                                                <i class="icon-trash"></i> 
+                                                            </button>
+                                                        </form>
+
+                                                    </td>
                                                 </tr>
                                             }
                                         </tbody>
@@ -53,4 +77,5 @@
             </div>
         </div>
     </div>
+</div>
 

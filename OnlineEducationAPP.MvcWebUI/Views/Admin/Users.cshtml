@@ -1,0 +1,79 @@
+﻿@model List<OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser>
+@{
+    ViewData["Title"] = "Users";
+}
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser> UserManager
+<style>
+
+    #add {
+        top: 45px;
+        left:32px;
+        padding:8px;
+        position: absolute;
+        margin-top:7px;
+        border-radius:12px
+    }
+</style>
+
+<div class="app-content container center-layout mt-2">
+    <div class="content-wrapper">
+        <div class="content-body">
+            <div class="card col-12">
+                <div class="card-header">
+                    <h2 class="card-title">Users</h2>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <a id="add" asp-action="AddTeacher" class="btn-primary"><i class="ft-plus-circle"></i>&nbsp;New Teacher</a>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body" style="margin-top:26px">
+
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>User Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var user in Model)
+                                    {
+                                        <tr id="row_@user.Id">
+                                            <td>@user.Name</td>
+                                            <td>@user.UserName</td>
+                                            <td>@user.Email</td>
+                                            <td>@String.Join(", ", UserManager.GetRolesAsync(user).GetAwaiter().GetResult().ToArray())</td>
+                                            <td>
+                                                <form asp-action="DeleteUserById" asp-route-id="@user.Id">
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="icon-trash"></i>
+                                                    </button>
+                                                </form>
+
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer" style="text-align:center;">
+                        <a class="btn btn-light" onclick="window.history.back();">
+                            <i class="ft-corner-up-left"></i> Back
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

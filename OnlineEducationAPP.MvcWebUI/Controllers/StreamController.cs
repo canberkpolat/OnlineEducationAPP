@@ -23,7 +23,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             unitOfWork = _unitOfWork;
             userManager = _userManager;
         }
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher,Admin")]
         [Route("Stream/Create")]
         [HttpGet]
         public IActionResult Create()
@@ -33,7 +33,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             return View(courses);
         }
 
-        [Authorize(Roles = "Student,Teacher")]
+        [Authorize(Roles = "Student,Teacher,Admin")]
         [Route("Stream/{Id}")]
         [HttpGet]
         public IActionResult Stream(int Id)
@@ -42,7 +42,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             return View(stream);
         }
 
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher,Admin")]
         [HttpPost]
         public dynamic Create(int courseId, string streamName)
         {

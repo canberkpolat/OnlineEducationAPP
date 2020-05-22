@@ -12,6 +12,9 @@ namespace OnlineEducationAPP.MvcWebUI.Repository.Abstract
         void Add(T entity);
         IQueryable<T> GetAll();
         IQueryable<T> Find(Expression<Func<T, bool>> predicate);
+        void Delete(T entity);
+        
+
 
 
     }

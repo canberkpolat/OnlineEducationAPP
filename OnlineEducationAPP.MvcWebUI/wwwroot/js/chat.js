@@ -53,6 +53,8 @@ input.addEventListener("keyup", function (event) {
         document.getElementById("sendButton").click();
     }
 });
+
+
 $("#sendButton").on("click", function () {
 
     var message = $("#messageInput").val();

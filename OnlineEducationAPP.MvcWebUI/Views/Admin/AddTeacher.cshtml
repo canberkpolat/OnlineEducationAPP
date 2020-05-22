@@ -1,0 +1,92 @@
+﻿@model  RegisterViewModel
+@{
+    ViewData["Title"] = "AddTeacher";
+}
+
+    <div class="app-content container center-layout mt-2">
+        <div class="content-wrapper">
+                <div class="content-body">
+                    <!-- Striped row layout section start -->
+                    <section id="striped-row-form-layouts">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-content collpase show">
+                                        <div class="card-body">
+                                            <form enctype="multipart/form-data" asp-action="AddTeacher" method="post" class="form form-horizontal striped-rows form-bordered">
+                                                <div class="form-body">
+                                                    <h4 class="form-section"><i class="ft-user"></i> Add Teacher</h4>
+                                                    <div class="text-danger" asp-validation-summary="All"></div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 label-control" for="projectinput1">First Name</label>
+                                                        <div class="col-md-9">
+                                                            <input class="form-control" name="Name" placeholder="First Name">
+                                                            <span class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 label-control" for="projectinput2">Last Name</label>
+                                                        <div class="col-md-9">
+                                                            <input class="form-control" name="SurName" placeholder="Last Name">
+                                                            <span a class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 label-control" for="projectinput3">User Name</label>
+                                                        <div class="col-md-9">
+                                                            <input class="form-control" name="UserName" placeholder="User Name">
+                                                            <span class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 label-control" for="projectinput3">E-mail</label>
+                                                        <div class="col-md-9">
+                                                            <input class="form-control" name="Email" placeholder="E-mail">
+                                                            <span class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 label-control" for="projectinput3">Password</label>
+                                                        <div class="col-md-9">
+                                                            <input type="password" name="Password" class="form-control" placeholder="Password">
+                                                            <span class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 label-control" for="projectinput3">Password</label>
+                                                        <div class="col-md-9">
+                                                            <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password">
+                                                            <span class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 label-control">Change Profile Picture</label>
+                                                        <div class="col-md-9">
+                                                            <label class="file center-block">
+                                                                <input name="profilePhoto" type="file">
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions center">
+                                                    <a class="btn btn-outline-secondary" onclick="window.history.back();">
+                                                        <i class="ft-corner-up-left"></i> Back
+                                                    </a>
+                                                    <button type="submit" class="btn btn-dark">
+                                                        <i class="ft-save"></i> Save
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </section>
+                    <!-- // Striped row layout section end -->
+                </div>
+            </div>
+        </div>
+    </div>

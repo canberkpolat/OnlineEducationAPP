@@ -33,6 +33,14 @@ namespace OnlineEducationAPP.MvcWebUI.Identity
             builder.Entity<Stream>()
                 .HasIndex(t => t.UserId)
                 .IsUnique(false);
+
+            builder.Entity<ApplicationUser>(b => {
+                b.HasMany(x => x.Roles)
+                .WithOne()
+                .HasForeignKey(u => u.UserId)
+                .IsRequired();
+            });
+                
         }
     }
 }

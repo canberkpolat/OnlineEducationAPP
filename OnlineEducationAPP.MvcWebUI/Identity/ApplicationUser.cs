@@ -14,5 +14,6 @@ namespace OnlineEducationAPP.MvcWebUI.Identity
         public string ProfileImageUrl { get; set; }
         public string CarouselImageUrl { get; set; }
         public virtual ICollection<Stream> Stream { get; set; }
+        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
     }
 }

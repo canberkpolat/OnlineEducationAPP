@@ -49,7 +49,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
         public IActionResult Category(int Id)
         {
-            var streams = streamRepository.GetAll().Where(stream => stream.Course.CategoryId == Id).ToList();
+            var streams = streamRepository.GetAll().Where(stream => stream.Course.CategoryId == Id).ToList(); 
             return View("Course",streams);
         }
     }

@@ -37,5 +37,10 @@ namespace OnlineEducationAPP.MvcWebUI.Repository.Concrete.EntityFrameworkCore
         {
             return context.Set<T>();
         }
+        public void Delete(T entity)
+        {
+            context.Set<T>().Remove(entity);
+        }
+
     }
 }

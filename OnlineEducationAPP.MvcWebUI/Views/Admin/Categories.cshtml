@@ -1,0 +1,55 @@
+﻿@model List<Category>
+@{
+    ViewData["Title"] = "Categories";
+}
+
+    <div class="app-content container center-layout mt-2">
+        <div class="content-wrapper">
+            <div class="content-body">
+                <div class="card col-12">
+                    <div class="card-header">
+                        <h2 class="card-title">Categories</h2>
+                    </div>
+                    <div class="card-content collapse show">
+                        <div class="card-body" >
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Category Name</th>
+                                            <th>Category Type</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var category in Model)
+                                        {
+                                            <tr id="row_@category.Id">
+                                                <td>@category.Id</td>
+                                                <td>@category.Name</td>
+                                                <td>@category.Type</td>
+                                                <td>
+                                                    <form asp-action="DeleteCategoryById" asp-route-id="@category.Id">
+                                                        <button type="submit" class="btn btn-danger">
+                                                            <i class="icon-trash"></i>
+                                                        </button>
+                                                    </form>
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer" style="text-align:center;">
+                            <a class="btn btn-light" onclick="window.history.back();">
+                                <i class="ft-corner-up-left"></i> Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

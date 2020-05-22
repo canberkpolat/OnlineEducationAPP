@@ -51,6 +51,7 @@ namespace OnlineEducationAPP.MvcWebUI
             services.AddTransient<ICourseRepository, EfCourseRepository>();
             services.AddTransient<ICategoryRepository, EfCategoryRepository>();
             services.AddTransient<IStreamRepository, EfStreamRepository>();
+            services.AddTransient<IUserRepository, EfUserRepository>();
             services.AddTransient<IUnitOfWork, EfUnitOfWork>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -90,6 +91,7 @@ namespace OnlineEducationAPP.MvcWebUI
             {
                 options.Cookie.Expiration = TimeSpan.FromDays(1);
                 options.Cookie.HttpOnly = true;
+                options.AccessDeniedPath = "/Account/AccessDenied";
                 options.LoginPath = "/Account/Login";
                 options.LogoutPath = "/Account/Logout";
                 options.SlidingExpiration = true;
@@ -102,15 +104,20 @@ namespace OnlineEducationAPP.MvcWebUI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseCors("_myAllowSpecificOrigins");
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseStatusCodePagesWithRedirects("/Error/{0}");
             }
-            app.UseStatusCodePages();
+            else
+            {
+                app.UseStatusCodePagesWithRedirects("/Error/{0}");
+            }
+            
             //wwwroot
             app.UseStaticFiles();
 
@@ -118,8 +125,7 @@ namespace OnlineEducationAPP.MvcWebUI
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ChatHub>("/chatHub/24");
-                routes.MapHub<ChatHub>("/chatHub/22");
+                routes.MapHub<ChatHub>("/chatHub");
             });
 
             app.UseMvc(routes =>
