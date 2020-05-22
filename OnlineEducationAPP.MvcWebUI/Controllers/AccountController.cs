@@ -103,8 +103,20 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                         await roleManager.CreateAsync(role);
                     }
                     await userManager.AddToRoleAsync(user, "Student");
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Dashboard");
+
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token },Request.Scheme);
+
+                    SendEmailConfirmationLink(user, confirmationLink);
+
+                    ViewBag.ErrorTitle = "Registration Successful";
+                    ViewBag.ErrorMessage = "We have sent you a confirmation link. Please click it before you login to the site.";
+
+                    return View("Error");
+
+                    //await signInManager.SignInAsync(user, isPersistent: false);
+                    //return RedirectToAction("Index", "Dashboard");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -113,6 +125,36 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             }
             return View(model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if(userId == null || token == null)
+            {
+                ViewBag.ErroTitle = "Invalid user or token.";
+                ViewBag.ErrorMessage = "User id or token can not be null. Please check your link we have sent you and try again.";
+                return View("Error");
+            }
+
+            var user = await userManager.FindByIdAsync(userId);
+
+            if(user == null)
+            {
+                ViewBag.ErrorMessage = $"This user is not found";
+                return View("NotFound");
+            }
+
+            var result = await userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Login");
+            }
+
+            ViewBag.ErrorMessage = "Email can not be confirmed";
+            return View("Error");
+        }
+
 
         public IActionResult AccessDenied()
         {
@@ -146,6 +188,27 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             }
             return View(model);
         }
+
+        private static void SendEmailConfirmationLink(ApplicationUser user, string emailConfirmationLink)
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Online Education App", "app.onlineeducation@gmail.com"));
+            message.To.Add(new MailboxAddress(user.Name, user.Email));
+            message.Subject = "Register Email Confirmation";
+            message.Body = new TextPart("plain")
+            {
+                Text = "Please click this link to confirm your registration  " + emailConfirmationLink
+            };
+
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.Authenticate("app.onlineeducation@gmail.com", "Haydarcan1*");
+                client.Send(message);
+                client.Disconnect(true);
+            }
+        }
+
 
         private static void SendResetPasswordLink(ForgotPasswordViewModel model, ApplicationUser user, string passwordResetLink)
         {
