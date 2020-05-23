@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authorization;
@@ -35,10 +36,15 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl)
+        public async Task<IActionResult> Login(string returnUrl)
         {
-            ViewBag.returnUrl = returnUrl;
-            return View();
+            LoginViewModel model = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+
+            return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -52,7 +58,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 if (user != null)
                 {
                     await signInManager.SignOutAsync();
-                    var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+                    var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
                     if (result.Succeeded)
                     {
                         if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -85,7 +91,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                   
+
                 var user = new ApplicationUser();
                 user.Name = model.Name;
                 user.Surname = model.Surname;
@@ -106,7 +112,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token },Request.Scheme);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token }, Request.Scheme);
 
                     SendEmailConfirmationLink(user, confirmationLink);
 
@@ -130,7 +136,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
-            if(userId == null || token == null)
+            if (userId == null || token == null)
             {
                 ViewBag.ErroTitle = "Invalid user or token.";
                 ViewBag.ErrorMessage = "User id or token can not be null. Please check your link we have sent you and try again.";
@@ -139,7 +145,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
             var user = await userManager.FindByIdAsync(userId);
 
-            if(user == null)
+            if (user == null)
             {
                 ViewBag.ErrorMessage = $"This user is not found";
                 return View("NotFound");
@@ -175,7 +181,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             if (ModelState.IsValid)
             {
                 var user = await userManager.FindByEmailAsync(model.Email);
-                if(user != null)
+                if (user != null)
                 {
                     var token = await userManager.GeneratePasswordResetTokenAsync(user);
 
@@ -200,13 +206,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 Text = "Please click this link to confirm your registration  " + emailConfirmationLink
             };
 
-            using (var client = new SmtpClient())
-            {
-                client.Connect("smtp.gmail.com", 587, false);
-                client.Authenticate("app.onlineeducation@gmail.com", "Haydarcan1*");
-                client.Send(message);
-                client.Disconnect(true);
-            }
+            SmtpClientSending(message);
         }
 
 
@@ -221,6 +221,10 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 Text = "Please click this link to reset your password  " + passwordResetLink
             };
 
+            SmtpClientSending(message);
+        }
+        private static void SmtpClientSending(MimeMessage message)
+        {
             using (var client = new SmtpClient())
             {
                 client.Connect("smtp.gmail.com", 587, false);
@@ -234,7 +238,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [AllowAnonymous]
         public IActionResult ResetPassword(string email, string token)
         {
-            if(email == null || token == null)
+            if (email == null || token == null)
             {
                 ModelState.AddModelError("", "Invalid password reset token");
             }
@@ -264,6 +268,84 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 }
             }
             return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult ExternalLogin(string provider, string returnUrl)
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallBack", "Account", new { ReturnUrl = returnUrl });
+            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+            return new ChallengeResult(provider, properties);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallBack(string returnUrl = null, string remoteError = null)
+        {
+            returnUrl = returnUrl ?? Url.Content("/Dashboard/Index");
+
+            LoginViewModel model = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+
+            if (remoteError != null)
+            {
+                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
+
+                return View("Login", model);
+            }
+
+            var info = await signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                ModelState.AddModelError(string.Empty, "Error loading external login information");
+
+                return View("Login", model);
+            }
+
+            var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+
+            if (signInResult.Succeeded)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                if(email != null)
+                {
+                    var user = await userManager.FindByEmailAsync(email);
+
+                    if (user == null)
+                    {
+                        user = new ApplicationUser
+                        {
+                            UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            EmailConfirmed = true,
+                            ProfileImageUrl = "/app-assets/images/backgrounds/default-profile-picture.jpg",
+                            Name = "",
+                            Surname = ""
+                        };
+
+
+                        await userManager.CreateAsync(user);
+                        await userManager.AddToRoleAsync(user, "Student");
+                    }
+
+
+                    await userManager.AddLoginAsync(user, info);
+                    await signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
+                }
+            }
+            ViewBag.ErrorTitle = $"Email claim not received from : {info.LoginProvider}";
+            ViewBag.ErrorMessage = "Please contact support on app.onlineeducation@gmail.com";
+
+            return View("Error");
         }
 
 

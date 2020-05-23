@@ -23,8 +23,7 @@ namespace OnlineEducationAPP.MvcWebUI.Identity
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Ignore<IdentityUserLogin<string>>();
-
+            
             //builder.Entity<ApplicationUser>()
             //    .HasMany(a => a.Stream)
             //    .WithOne(b => b.User)

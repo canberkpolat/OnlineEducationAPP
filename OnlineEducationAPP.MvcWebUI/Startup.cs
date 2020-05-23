@@ -64,7 +64,7 @@ namespace OnlineEducationAPP.MvcWebUI
             {
                 //Password Settings
                 options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 10;
+                options.Password.RequiredLength = 6;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
 
@@ -84,6 +84,19 @@ namespace OnlineEducationAPP.MvcWebUI
             })
                 .AddEntityFrameworkStores<OnlineEducationDbContext>()
                 .AddDefaultTokenProviders();
+
+
+            services.AddAuthentication()
+                .AddGoogle(option =>
+                {
+                    option.ClientId = "259830213470-k8vvqq16tjjugutvpalpjb3dr8k01udg.apps.googleusercontent.com";
+                    option.ClientSecret = "nzwCmQevQd-ixi0I7b28fNEK";
+                })
+                .AddFacebook(option =>
+                {
+                    option.AppId = "2953476641407757";
+                    option.AppSecret = "ea698f157ad33ac614870dc2a7cc6378";
+                });
 
 
             //Cookie Settings
@@ -111,7 +124,6 @@ namespace OnlineEducationAPP.MvcWebUI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseStatusCodePagesWithRedirects("/Error/{0}");
             }
             else
             {

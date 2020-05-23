@@ -7,7 +7,7 @@
 
 <html class="loading" lang="en" data-textdirection="ltr">
 <head>
-    @{Html.RenderPartial("_CssJsLinks"); }
+    <partial name="_CssJsLinks" />
     <link rel="stylesheet" type="text/css" href="~/app-assets/css/components.css">
 </head>
 
@@ -25,14 +25,29 @@
                                     <div class="card-title text-center">
                                         <h3 class="brand-text">Online Education</h3>
                                     </div>
+                                    <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
+                                        <span>Easily Using</span>
+                                    </h6>
                                 </div>
                                 <div class="card-content">
+                                    <div class="text-center">
+                                        <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+                                            @foreach (var provider in Model.ExternalLogins)
+                                            {
+                                            <button type="submit" name="provider" value="@provider.Name"
+                                                    class="btn btn-social-icon mr-1 mb-1 btn-outline-@provider.Name.ToLower()"
+                                                    title="Login using your @provider.DisplayName account">
+                                                <span class="la la-@provider.Name.ToLower()"></span>
+                                            </button>
+                                            }
+                                        </form>
+                                    </div>
                                     <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1">
                                         <span>Enter your account credentials</span>
                                     </p>
                                     <div class="card-body">
                                         <form class="form-horizontal" asp-action="Login" method="post" novalidate>
-                                            <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
+                                            <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
                                             <div class="text-danger" asp-validation-summary="All"></div>
                                             <fieldset class="form-group position-relative has-icon-left">
                                                 <input asp-for="UserName" class="form-control" id="UserName" placeholder="Your Username"
@@ -50,9 +65,7 @@
                                             </fieldset>
                                             <div class="form-group row">
                                                 <div class="col-md-6 col-12 text-center text-sm-left">
-                                                    <fieldset>
-                                                        
-                                                    </fieldset>
+                                                    <fieldset></fieldset>
                                                 </div>
                                                 <div class="col-md-6 col-12 float-sm-left text-center text-sm-right"><a asp-action="ForgotPassword" class="card-link">Forgot Password?</a></div>
                                             </div>
