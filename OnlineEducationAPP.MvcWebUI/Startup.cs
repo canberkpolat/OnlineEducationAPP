@@ -57,9 +57,6 @@ namespace OnlineEducationAPP.MvcWebUI
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
-
-
-
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 //Password Settings

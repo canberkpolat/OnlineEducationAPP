@@ -20,19 +20,16 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public AdminController(IUnitOfWork unitOfWork
             ,IHostingEnvironment hostingEnvironment
-            ,SignInManager<ApplicationUser> signInManager
             ,UserManager<ApplicationUser> userManager
             , RoleManager<IdentityRole> roleManager)
         {
             _unitOfWork = unitOfWork;
             _hostingEnvironment = hostingEnvironment;
-            _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
         }

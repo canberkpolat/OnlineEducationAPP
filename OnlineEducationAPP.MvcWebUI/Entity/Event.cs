@@ -14,6 +14,7 @@ namespace OnlineEducationAPP.MvcWebUI.Entity
         public DateTime DateEnd { get; set; }
         public string Text { get; set; }
         public string Description { get; set; }
+
         [Required]
         public int CourseId { get; set; }
         public virtual Course Course { get; set; }

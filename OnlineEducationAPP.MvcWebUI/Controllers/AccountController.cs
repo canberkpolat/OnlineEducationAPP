@@ -290,14 +290,12 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 ReturnUrl = returnUrl,
                 ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
             };
-
             if (remoteError != null)
             {
                 ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
 
                 return View("Login", model);
             }
-
             var info = await signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
@@ -330,13 +328,9 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                             Name = "",
                             Surname = ""
                         };
-
-
                         await userManager.CreateAsync(user);
                         await userManager.AddToRoleAsync(user, "Student");
                     }
-
-
                     await userManager.AddLoginAsync(user, info);
                     await signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);

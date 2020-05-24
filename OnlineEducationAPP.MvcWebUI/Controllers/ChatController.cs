@@ -38,5 +38,10 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             await _chat.Clients.Group(roomName).SendAsync("ReceiveMessage", User.Identity.Name, message);
             return Ok();
         }
+
+        public IActionResult PrivateChat()
+        {
+            return View();
+        }
     }
 }
