@@ -30,19 +30,29 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> JoinRoom([FromBody] dynamic request)
+        public async Task<List<dynamic>> JoinRoom([FromBody] dynamic request)
         {
-            try
-            {
-                await _chat.Groups.AddToGroupAsync((string)request.connectionId, (string)request.roomName.ToString());
-            }
-            catch (Exception ex)
-            {
+            await _chat.Groups.AddToGroupAsync((string)request.connectionId, (string)request.roomName.ToString());
 
-                throw;
+            string[] tmp = ((string)request.roomName).Split("/");
+
+            List<dynamic> response = new List<dynamic>();
+            var messages = _unitOfWork.Messages.GetAll().Where(p => (p.SenderId == tmp[0] || p.ReceiverId == tmp[0]) && (p.SenderId == tmp[1] || p.ReceiverId == tmp[1])).OrderBy(p => p.SendTime).ToList();
+            foreach(var message in messages)
+            {
+                if(message.ReceiveTime == null)
+                {
+                    message.ReceiveTime = DateTime.UtcNow;
+                }
+                response.Add(new { 
+                    senderId = message.SenderId,
+                    senderUserName = message.SenderUser.UserName,
+                    imageTag = GravatarHtmlHelper.GetString(await GravatarHtmlHelper.GravatarImage(_userManager, message.SenderUser.Email, size: 48, defaultImage: GravatarHtmlHelper.DefaultImage.Identicon, rating: GravatarHtmlHelper.Rating.PG, cssClass: "")),
+                    text = message.Messages
+                });
             }
-           
-            return Ok();
+            _unitOfWork.SaveChanges();
+            return response;
         }
         //[HttpPost("[action]/{connectionId}/{roomName}")]
         //public async Task<IActionResult> LeaveRoom(string connectionId, string roomName)
@@ -72,7 +82,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 ReceiverId = (string)request.receiverId,
                 SenderId = user.Id,
                 Messages = (string)request.message,
-                SendTime = DateTime.Now,
+                SendTime = DateTime.UtcNow,
             };
             _unitOfWork.Messages.Add(msg);
             
@@ -87,30 +97,22 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             try
             {
                 var user = await _userManager.GetUserAsync(User);
-
-                var messages = _unitOfWork.Messages.GetAll().Where(t => 
-                                                                        (t.ReceiverId == receiverUserId || t.ReceiverId == user.Id)
-                                                                        && (t.SenderId == user.Id || t.SenderId == receiverUserId))
-                                                                        .OrderBy(t=> t.SendTime)
-                                                                        .ToList();
-                //ViewBag.ReceivingMessages = _unitOfWork.Messages.GetAll().Where(t => t.ReceiverId == senderUserId && t.SenderId == receiverUserId).ToList();
-
                  
 
                 var roomId = "";
                 if (receiverUserId.CompareTo(user.Id) == -1)
                 {
-                    roomId = user.Id + "/" + user.Id;
+                    roomId = user.Id + "/" + receiverUserId;
                 }
                 else
                 {
-                    roomId = user.Id + "/" + user.Id;
+                    roomId = receiverUserId + "/" + user.Id;
                 }
 
                 ViewBag.RoomId = roomId;
                 ViewBag.UserId = user.Id;
                 ViewBag.ReceiverUserId = receiverUserId;
-                return View(messages);
+                return View();
             }
             catch (Exception ex)
             {
