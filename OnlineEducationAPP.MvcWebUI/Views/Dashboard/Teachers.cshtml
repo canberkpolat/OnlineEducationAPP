@@ -1,0 +1,30 @@
+﻿@model List<OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Teachers";
+}
+<div class="app-content container center-layout mt-2">
+    <div class="content-wrapper">
+        <section id="user-cards-with-square-thumbnail" class="row mt-2">
+            @foreach (var user in Model)
+            {
+                <div class="col-xl-3 col-md-6 col-12">
+                    <div class="card box-shadow-1">
+                        <div class="text-center">
+                            <div class="card-body">
+                                <img src="@user.ProfileImageUrl" class="rounded-circle  height-150"
+                                     alt="Card image">
+                            </div>
+                            <div class="card-body">
+                                <button class="btn btn-dark btn-sm active" role="button" aria-pressed="true"> @user.Name @user.Surname</button>
+                                <br /> <br />
+                                <a href="/Chat/PrivateChat/@user.Id"><h3 class="card-subtitle text-muted">Send Message</h3></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+</div>
