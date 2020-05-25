@@ -6,8 +6,21 @@
 	height: calc(100% - 80px) !important;
 }
 
+.chat-application {
+	height: 802.83px;
+}
+
 .chat-content, .chat-body, .chat-left {
 	margin-left: 0px !important;
+}
+
+.chat-content::before{
+	display: none;
+}
+
+.chat-content {
+	max-width: 900px;
+	word-wrap: break-word;
 }
 
 .chat-app-window {

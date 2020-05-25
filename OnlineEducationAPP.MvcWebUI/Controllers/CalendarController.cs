@@ -58,7 +58,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 VideoOnDemandEndpoint = "https://onlineeducationapp.canberkpolat.com:8443/vod/",
                 StreamKey = streamKey
             };
-            streamRepository.Add(model);
+            unitOfWork.Streams.Add(model);
             unitOfWork.SaveChanges();
 
             var response = new
@@ -68,59 +68,6 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             };
 
             return response;
-        }
-
-        [HttpPost]
-        [Route("Stream/Start")]
-        public void Start([FromForm] string name)
-        {
-            var stream = streamRepository.Find(p => p.StreamKey == name && p.EndTime == null).FirstOrDefault();
-            if(stream != null) { 
-                stream.IsActive = true;
-                stream.StartTime = DateTime.Now;
-
-                unitOfWork.SaveChanges();
-            }
-            else
-            {
-                throw new Exception("Invalid stream key.");
-            }
-        }
-
-        [HttpPost]
-        [Route("Stream/Update")]
-        public void Update([FromForm] string name)
-        {
-            var stream = streamRepository.Find(p => p.StreamKey == name && p.EndTime == null).FirstOrDefault();
-            if (stream != null)
-            {
-                stream.IsActive = true;
-                stream.UpdateTime = DateTime.Now;
-
-                unitOfWork.SaveChanges();
-            }
-            else
-            {
-                throw new Exception("Invalid stream key.");
-            }
-        }
-
-        [HttpPost]
-        [Route("Stream/End")]
-        public void End([FromForm] string name)
-        {
-            var stream = streamRepository.Find(p => p.StreamKey == name).FirstOrDefault();
-            if (stream != null)
-            {
-                stream.IsActive = false;
-                stream.EndTime = DateTime.Now;
-
-                unitOfWork.SaveChanges();
-            }
-            else
-            {
-                throw new Exception("Invalid stream key.");
-            }
         }
     }
 }

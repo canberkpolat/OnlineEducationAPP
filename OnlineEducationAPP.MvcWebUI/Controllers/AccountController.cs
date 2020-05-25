@@ -318,15 +318,22 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 {
                     var user = await userManager.FindByEmailAsync(email);
 
+                    var tmpUsername = email.Split('@')[0];
+
+                    while (!await CheckUsername(tmpUsername))
+                    {
+                        tmpUsername += new Random().Next(0,9);
+                    }
+                    
                     if (user == null)
                     {
                         user = new ApplicationUser
                         {
-                            UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
-                            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            UserName = tmpUsername,
+                            Email = email,
                             EmailConfirmed = true,
                             ProfileImageUrl = "/app-assets/images/backgrounds/default-profile-picture.jpg",
-                            Name = "",
+                            Name = tmpUsername,
                             Surname = ""
                         };
                         await userManager.CreateAsync(user);
@@ -343,6 +350,18 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             return View("Error");
         }
 
+        public async Task<bool> CheckUsername(string username)
+        {
+            var userWithSameUsername = await userManager.FindByNameAsync(username);
+            if (userWithSameUsername != null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
     }
 }
