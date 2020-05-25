@@ -7,6 +7,7 @@ using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MimeKit;
 using OnlineEducationAPP.MvcWebUI.Entity;
 using OnlineEducationAPP.MvcWebUI.Identity;
