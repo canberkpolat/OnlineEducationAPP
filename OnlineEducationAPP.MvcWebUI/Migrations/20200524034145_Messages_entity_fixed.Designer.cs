@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineEducationAPP.MvcWebUI.Identity;
 
 namespace OnlineEducationAPP.MvcWebUI.Migrations
 {
     [DbContext(typeof(OnlineEducationDbContext))]
-    partial class OnlineEducationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200524034145_Messages_entity_fixed")]
+    partial class Messages_entity_fixed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,13 +191,15 @@ namespace OnlineEducationAPP.MvcWebUI.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("OnlineEducationAPP.MvcWebUI.Entity.Message", b =>
+            modelBuilder.Entity("OnlineEducationAPP.MvcWebUI.Entity.Messages", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Messages");
+                    b.Property<string>("ApplicationId");
+
+                    b.Property<string>("Message");
 
                     b.Property<DateTime?>("ReceiveTime");
 
@@ -207,9 +211,7 @@ namespace OnlineEducationAPP.MvcWebUI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
+                    b.HasIndex("ApplicationId");
 
                     b.ToTable("Messages");
                 });
@@ -393,20 +395,16 @@ namespace OnlineEducationAPP.MvcWebUI.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser", "User")
-                        .WithMany("Event")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("OnlineEducationAPP.MvcWebUI.Entity.Message", b =>
+            modelBuilder.Entity("OnlineEducationAPP.MvcWebUI.Entity.Messages", b =>
                 {
-                    b.HasOne("OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser", "ReceiverUser")
-                        .WithMany("ReceiverMessages")
-                        .HasForeignKey("ReceiverId");
-
-                    b.HasOne("OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser", "SenderUser")
-                        .WithMany("SenderMessages")
-                        .HasForeignKey("SenderId");
+                    b.HasOne("OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser", "Application")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId");
                 });
 
             modelBuilder.Entity("OnlineEducationAPP.MvcWebUI.Entity.Stream", b =>

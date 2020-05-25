@@ -1,4 +1,6 @@
 ﻿@model List<OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser> UserManager
 @{
     ViewData["Title"] = "UserCards";
 }
@@ -15,12 +17,12 @@
                         <div class="text-center">
                             <div class="card-body">
                                 <img src="@user.ProfileImageUrl" class="rounded-circle  height-150"
-                                        alt="Card image">
+                                     alt="Card image">
                             </div>
                             <div class="card-body">
                                 <button class="btn btn-dark btn-sm active" role="button" aria-pressed="true"> @user.Name @user.Surname</button>
                                 <br /> <br />
-                                        <a asp-controller="Chat" asp-action="PrivateChat"><h3 class="card-subtitle text-muted">Send Message</h3></a>
+                                <a href="/Chat/PrivateChat/@user.Id"><h3 class="card-subtitle text-muted">Send Message</h3></a>
                             </div>
                         </div>
                     </div>

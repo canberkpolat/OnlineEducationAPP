@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Identity;
@@ -94,7 +95,7 @@ public static class GravatarHtmlHelper
         string imageSrc = "";
         if (user.ProfileImageUrl.Contains("default"))
         {
-            imageSrc = string.Format("https://www.gravatar.com/avatar/{2}?s={3}{4}{5}{6}",
+            imageSrc = string.Format("https://www.gravatar.com/avatar/{0}?s={1}{2}{3}{4}",
                 GetMd5Hash(emailAddress),
                 size.ToString(),
                 "&d=" + defaultImage.GetDescription(),
@@ -121,6 +122,14 @@ public static class GravatarHtmlHelper
         return imgTag;
     }
 
+    public static string GetString(IHtmlContent content)
+    {
+        using (var writer = new System.IO.StringWriter())
+        {
+            content.WriteTo(writer, HtmlEncoder.Default);
+            return writer.ToString();
+        }
+    }
 
 
 

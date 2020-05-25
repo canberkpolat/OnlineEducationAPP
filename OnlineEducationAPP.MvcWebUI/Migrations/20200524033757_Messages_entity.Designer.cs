@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineEducationAPP.MvcWebUI.Identity;
 
 namespace OnlineEducationAPP.MvcWebUI.Migrations
 {
     [DbContext(typeof(OnlineEducationDbContext))]
-    partial class OnlineEducationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200524033757_Messages_entity")]
+    partial class Messages_entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,59 +161,6 @@ namespace OnlineEducationAPP.MvcWebUI.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("OnlineEducationAPP.MvcWebUI.Entity.Event", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CourseId");
-
-                    b.Property<DateTime>("DateBegin");
-
-                    b.Property<DateTime>("DateEnd");
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Text");
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Events");
-                });
-
-            modelBuilder.Entity("OnlineEducationAPP.MvcWebUI.Entity.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Messages");
-
-                    b.Property<DateTime?>("ReceiveTime");
-
-                    b.Property<string>("ReceiverId");
-
-                    b.Property<DateTime?>("SendTime");
-
-                    b.Property<string>("SenderId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("OnlineEducationAPP.MvcWebUI.Entity.Stream", b =>
@@ -383,30 +332,6 @@ namespace OnlineEducationAPP.MvcWebUI.Migrations
                         .WithMany("Courses")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("OnlineEducationAPP.MvcWebUI.Entity.Event", b =>
-                {
-                    b.HasOne("OnlineEducationAPP.MvcWebUI.Entity.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser", "User")
-                        .WithMany("Event")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("OnlineEducationAPP.MvcWebUI.Entity.Message", b =>
-                {
-                    b.HasOne("OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser", "ReceiverUser")
-                        .WithMany("ReceiverMessages")
-                        .HasForeignKey("ReceiverId");
-
-                    b.HasOne("OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser", "SenderUser")
-                        .WithMany("SenderMessages")
-                        .HasForeignKey("SenderId");
                 });
 
             modelBuilder.Entity("OnlineEducationAPP.MvcWebUI.Entity.Stream", b =>
