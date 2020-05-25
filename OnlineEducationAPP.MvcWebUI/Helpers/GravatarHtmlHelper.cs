@@ -95,7 +95,9 @@ public static class GravatarHtmlHelper
         string imageSrc = "";
         if (user.ProfileImageUrl.Contains("default"))
         {
-            imageSrc = string.Format("https://www.gravatar.com/avatar/{0}?s={1}{2}{3}{4}",
+            imageSrc = string.Format("{0}://{1}.gravatar.com/avatar/{2}?s={3}{4}{5}{6}",
+                htmlHelper.ViewContext.HttpContext.Request.IsHttps || forceSecureRequest ? "https" : "http",
+                htmlHelper.ViewContext.HttpContext.Request.IsHttps || forceSecureRequest ? "secure" : "www",
                 GetMd5Hash(emailAddress),
                 size.ToString(),
                 "&d=" + defaultImage.GetDescription(),
