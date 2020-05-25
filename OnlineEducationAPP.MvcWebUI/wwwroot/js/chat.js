@@ -23,10 +23,38 @@ connection.on("ReceiveMessage", function (username, message) {
         </div>');
 });
 
-var joinRoom = function () {
 
-    var url = '/Chat/JoinRoom/' + _connectionId + '/' + roomName;
-    axios.post(url, null)
+connection.on("ReceivePrivateMessage", function (username, senderId, imageTag,message) {
+    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    var msgList = $('#chats');
+
+    var backgroundColor = intToRGB(hashCode(username));
+    var textColor = invertColor(backgroundColor);
+    var align = "";
+    var placement = "right"
+    if (senderId != userId) {
+
+        align = "chat-left";
+        placement = "left";
+    } 
+    msgList.append('\
+        <div class="chat ' + align +'">\
+         <div class="chat-avatar">\
+            <a class="avatar" data-toggle="tooltip" data-placement="'+placement+'" >\
+           ' + imageTag + '\
+            </a>\
+        </div>\
+            <div class="chat-body">\
+                <div class="chat-content" style="color: '+ textColor + '; background-color: ' + backgroundColor + ';">' + username + ': ' + msg + '</div>\
+            </div>\
+        </div>');
+});
+
+
+var joinRoom = function () {
+    var url = '/Chat/JoinRoom';
+    var body = { "connectionId": _connectionId, "roomName": roomName };
+    axios.post(url, body)
         .then(res => {
             console.log("Room Joined", res);
         })
@@ -41,6 +69,7 @@ connection.start().then(function () {
         joinRoom();
     })
     $("#sendButton").disabled = false;
+    $("#sendButtonPrivate").disabled = false;
 }).catch(function (err) {
     return console.error(err.toString());
 });
@@ -54,17 +83,22 @@ input.addEventListener("keyup", function (event) {
     }
 });
 
+var input = document.getElementById("messageInput");
+input.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("sendButtonPrivate").click();
+    }
+});
+
+
+
 
 $("#sendButton").on("click", function () {
 
     var message = $("#messageInput").val();
     $("#messageInput").val('');
-    axios.post('/Chat/SendMessage', null, {
-        params: {
-            message,
-            roomName
-        }
-    })
+    axios.post('/Chat/SendMessage', { "message": message, "roomName": roomName})
         .then(res => {
             console.log("Message Sent", res);
         })
@@ -77,6 +111,25 @@ $("#sendButton").on("click", function () {
     //});
     event.preventDefault();
 });
+
+$("#sendButtonPrivate").on("click", function () {
+
+    var message = $("#messageInput").val();
+    $("#messageInput").val('');
+    axios.post('/Chat/SendPrivateMessage', { "message": message, "roomName": roomName, "receiverId": receiverId })
+        .then(res => {
+            console.log("Message Sent", res);
+        })
+        .catch(err => {
+            console.log("Failed to Sent Messages", err);
+        })
+
+    //connection.invoke("SendMessage", message).catch(function (err) {
+    //    return console.error(err.toString());
+    //});
+    event.preventDefault();
+});
+
 
 function hashCode(str) { // java String#hashCode
     var hash = 0;

@@ -15,6 +15,9 @@ namespace OnlineEducationAPP.MvcWebUI.Identity
         public DbSet<Category> Categories { get; set; }
         public DbSet<Stream> Streams { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
         public OnlineEducationDbContext(DbContextOptions<OnlineEducationDbContext> options) : base(options)
         {
 
@@ -39,7 +42,23 @@ namespace OnlineEducationAPP.MvcWebUI.Identity
                 .HasForeignKey(u => u.UserId)
                 .IsRequired();
             });
-                
+            builder.Entity<Message>()
+                .HasIndex(t => t.ReceiverId)
+                .IsUnique(false);
+
+            builder.Entity<Message>()
+                .HasOne(a => a.ReceiverUser)
+                .WithMany(c => c.ReceiverMessages)
+                .HasForeignKey(t => t.ReceiverId)
+                .HasPrincipalKey(t=>t.Id);
+
+            builder.Entity<Message>()
+                .HasOne(a => a.SenderUser)
+                .WithMany(c => c.SenderMessages)
+                .HasForeignKey(t => t.SenderId)
+                .HasPrincipalKey(t =>t.Id);
+
+
         }
     }
 }

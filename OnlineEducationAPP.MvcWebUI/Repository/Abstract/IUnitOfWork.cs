@@ -12,6 +12,7 @@ namespace OnlineEducationAPP.MvcWebUI.Repository.Abstract
         IStreamRepository Streams { get; }
         IUserRepository Users { get; }
         IEventRepository Events { get; }
+        IMessageRepository Messages { get; }
         
 
         int SaveChanges();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Identity;
@@ -79,7 +80,6 @@ public static class GravatarHtmlHelper
     /// <param name="rating">Gravatar content rating (note that Gravatars are self-rated)</param>
     /// <param name="forceSecureRequest">Always do secure (https) requests</param>
     public static async Task<IHtmlContent> GravatarImage(
-      this IHtmlHelper htmlHelper,
       UserManager<ApplicationUser> _userManager,
       string emailAddress,
       int size = 80,
@@ -95,12 +95,10 @@ public static class GravatarHtmlHelper
         string imageSrc = "";
         if (user.ProfileImageUrl.Contains("default"))
         {
-            imageSrc = string.Format("{0}://{1}.gravatar.com/avatar/{2}?s={3}{4}{5}{6}",
-                htmlHelper.ViewContext.HttpContext.Request.IsHttps || forceSecureRequest ? "https" : "http",
-                htmlHelper.ViewContext.HttpContext.Request.IsHttps || forceSecureRequest ? "secure" : "www",
+            imageSrc = string.Format("https://www.gravatar.com/avatar/{0}?s={1}{2}{3}{4}",
                 GetMd5Hash(emailAddress),
                 size.ToString(),
-                "&d=" + (!string.IsNullOrEmpty(defaultImageUrl) ? htmlHelper.UrlEncoder.Encode(defaultImageUrl) : defaultImage.GetDescription()),
+                "&d=" + defaultImage.GetDescription(),
                 forceDefaultImage ? "&f=y" : "",
                 "&r=" + rating.GetDescription()
                 );
@@ -124,6 +122,14 @@ public static class GravatarHtmlHelper
         return imgTag;
     }
 
+    public static string GetString(IHtmlContent content)
+    {
+        using (var writer = new System.IO.StringWriter())
+        {
+            content.WriteTo(writer, HtmlEncoder.Default);
+            return writer.ToString();
+        }
+    }
 
 
 
