@@ -13,15 +13,13 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 {
     public class StreamController : Controller
     {
-        private IStreamRepository streamRepository;
         private IUnitOfWork unitOfWork;
-        private UserManager<ApplicationUser> userManager;
+        private UserManager<ApplicationUser> _userManager;
         
-        public StreamController(IUnitOfWork _unitOfWork, IStreamRepository _streamRepository, UserManager<ApplicationUser> _userManager)
+        public StreamController(IUnitOfWork _unitOfWork, UserManager<ApplicationUser> userManager)
         {
-            streamRepository = _streamRepository;
             unitOfWork = _unitOfWork;
-            userManager = _userManager;
+            _userManager = userManager;
         }
         [Authorize(Roles = "Teacher,Admin")]
         [Route("Stream/Create")]
@@ -37,7 +35,8 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [HttpGet]
         public IActionResult Stream(int Id)
         {
-            var stream = streamRepository.Get(Id);
+            var stream = unitOfWork.Streams.Get(Id);
+            ViewBag.UserId = _userManager.GetUserId(User);
             return View(stream);
         }
 
@@ -45,7 +44,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [HttpPost]
         public dynamic Create(int courseId, string streamName)
         {
-            var userID = userManager.GetUserId(User);
+            var userID = _userManager.GetUserId(User);
 
             string streamKey = Guid.NewGuid().ToString();
 
@@ -60,7 +59,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 VideoOnDemandEndpoint = "https://onlineeducationapp.canberkpolat.com:8443/vod/",
                 StreamKey = streamKey
             };
-            streamRepository.Add(model);
+            unitOfWork.Streams.Add(model);
             unitOfWork.SaveChanges();
 
             var response = new
@@ -76,7 +75,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [Route("Stream/Start")]
         public void Start([FromForm] string name)
         {
-            var stream = streamRepository.Find(p => p.StreamKey == name && p.EndTime == null).FirstOrDefault();
+            var stream = unitOfWork.Streams.Find(p => p.StreamKey == name && p.EndTime == null).FirstOrDefault();
             if(stream != null) { 
                 stream.IsActive = true;
                 stream.StartTime = DateTime.Now;
@@ -93,7 +92,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [Route("Stream/Update")]
         public void Update([FromForm] string name)
         {
-            var stream = streamRepository.Find(p => p.StreamKey == name && p.EndTime == null).FirstOrDefault();
+            var stream = unitOfWork.Streams.Find(p => p.StreamKey == name && p.EndTime == null).FirstOrDefault();
             if (stream != null)
             {
                 stream.IsActive = true;
@@ -111,7 +110,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [Route("Stream/End")]
         public void End([FromForm] string name)
         {
-            var stream = streamRepository.Find(p => p.StreamKey == name).FirstOrDefault();
+            var stream = unitOfWork.Streams.Find(p => p.StreamKey == name).FirstOrDefault();
             if (stream != null)
             {
                 stream.IsActive = false;

@@ -7,31 +7,8 @@ var roomName = $('#room-name').val();
 $("#sendButton").disabled = true;
 
 if (typeof roomName !== 'undefined') {
-    connection.on("ReceiveMessage", function (username, message) {
-        var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-        var msgList = $('#chats');
-
-        var backgroundColor = intToRGB(hashCode(username));
-        var textColor = invertColor(backgroundColor);
-
-
-        msgList.append('\
-            <div class="chat chat-left">\
-                <div class="chat-body">\
-                    <div class="chat-content" style="color: '+ textColor + '; background-color: ' + backgroundColor + ';">' + username + ': ' + msg + '</div>\
-                </div>\
-            </div>');
-        $('.chat-app-window').scrollTop($('.chat-app-window').height());
-    });
-
-
-    connection.on("ReceivePrivateMessage", function (username, senderId, imageTag,message) {
-        var placement = "right";
-        if (senderId !== userId) {
-            placement = "left";
-        }
-        addChatMessage(placement, username, imageTag, message);
+    connection.on("ReceiveMessage", function (username, senderId, imageTag, message) {
+        addChatMessage(senderId, username, imageTag, message);
     });
 
     var joinRoom = function () {
@@ -41,11 +18,7 @@ if (typeof roomName !== 'undefined') {
             .then(res => {
                 for (var i = 0; i < res.data.length; i++) {
                     var obj = res.data[i];
-                    var placement = "right";
-                    if (obj.senderId !== userId) {
-                        placement = "left";
-                    }
-                    addChatMessage(placement, obj.senderUserName, obj.imageTag, obj.text);
+                    addChatMessage(obj.senderId, obj.senderUserName, obj.imageTag, obj.text);
                 }
                 $('#loading').hide();
                 console.log("Room Joined", res);
@@ -58,12 +31,9 @@ if (typeof roomName !== 'undefined') {
     connection.start().then(function () {
         connection.invoke('getConnectionId').then(function (connectionId) {
             _connectionId = connectionId;
-            if (typeof userId !== 'undefined' && typeof receiverId !== 'undefined') {
-                joinRoom();
-            }
+            joinRoom();
         })
         $("#sendButton").disabled = false;
-        $("#sendButtonPrivate").disabled = false;
     }).catch(function (err) {
         return console.error(err.toString());
     });
@@ -79,7 +49,6 @@ if (typeof roomName !== 'undefined') {
     });
 
     $("#sendButton").on("click", function () {
-
         var message = $("#messageInput").val();
         $("#messageInput").val('');
         axios.post('/Chat/SendMessage', { "message": message, "roomName": roomName})
@@ -89,34 +58,18 @@ if (typeof roomName !== 'undefined') {
             .catch(err => {
                 console.log("Failed to Sent Messages", err);
             })
-
-        //connection.invoke("SendMessage", message).catch(function (err) {
-        //    return console.error(err.toString());
-        //});
         event.preventDefault();
     });
-
-    $("#sendButtonPrivate").on("click", function () {
-
-        var message = $("#messageInput").val();
-        $("#messageInput").val('');
-        axios.post('/Chat/SendPrivateMessage', { "message": message, "roomName": roomName, "receiverId": receiverId })
-            .then(res => {
-                console.log("Message Sent", res);
-            })
-            .catch(err => {
-                console.log("Failed to Sent Messages", err);
-            })
-
-        //connection.invoke("SendMessage", message).catch(function (err) {
-        //    return console.error(err.toString());
-        //});
-        event.preventDefault();
-    });
-
 }
 
-function addChatMessage(placement, username, imageTag, msg) {
+function addChatMessage(senderId, username, imageTag, msg) {
+    if (typeof $('#player').val() !== 'undefined') {
+        $(".chat-application").css("height", $('#player').css("height"));
+    }
+    var placement = "right";
+    if (senderId !== userId || typeof $('#player').val() !== 'undefined') {
+        placement = "left";
+    }
     msg = msg.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     var msgList = $('#chats');
     var backgroundColor = intToRGB(hashCode(username));

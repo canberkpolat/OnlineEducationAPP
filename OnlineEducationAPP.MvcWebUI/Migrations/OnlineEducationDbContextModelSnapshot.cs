@@ -201,6 +201,8 @@ namespace OnlineEducationAPP.MvcWebUI.Migrations
 
                     b.Property<string>("ReceiverId");
 
+                    b.Property<string>("RoomName");
+
                     b.Property<DateTime?>("SendTime");
 
                     b.Property<string>("SenderId");
