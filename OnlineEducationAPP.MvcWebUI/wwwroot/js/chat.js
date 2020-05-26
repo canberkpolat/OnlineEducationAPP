@@ -63,6 +63,9 @@ if (typeof roomName !== 'undefined') {
 }
 
 function addChatMessage(senderId, username, imageTag, msg) {
+    if (typeof $('#player').val() !== 'undefined') {
+        $(".chat-application").css("height", $('#player').css("height"));
+    }
     var placement = "right";
     if (senderId !== userId || typeof $('#player').val() !== 'undefined') {
         placement = "left";
