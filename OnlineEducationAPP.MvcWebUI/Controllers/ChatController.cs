@@ -119,9 +119,14 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
                 throw;
             }
-         
+        }
 
-            
+        public async Task<IActionResult> MessageNotifications()
+        {
+            var currentUserId = await _userManager.GetUserAsync(User);
+
+            var messages = _unitOfWork.Messages.GetAll().Where(t => t.ReceiverId == null).GroupBy(t => t.Id).ToList();
+            return View("_Header",messages);
         }
     }
 }

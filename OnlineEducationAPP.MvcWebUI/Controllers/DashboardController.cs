@@ -26,23 +26,18 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
         public IActionResult Index(string searchString)
         {
-            
-
             ViewData["CurrentFilter"] = searchString;
 
-            var list = from s in unitOfWork.Streams.GetAll()
-                     select s;
+            var streamList = from stream in unitOfWork.Streams.GetAll()
+                             select stream;
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (String.IsNullOrEmpty(searchString))
             {
-                list = list.Where(t => t.StreamName.Contains(searchString) || t.User.Name.Contains(searchString) || t.Course.Name.Contains(searchString));
+                return View(streamList.OrderByDescending(t => t.Id).Take(15).ToList());
             }
-            else
-            {
-                return View(list.OrderByDescending(p => p.Id).Take(15).ToList());
-            }
-            //var streams = unitOfWork.Streams.GetAll().OrderByDescending(p => p.Id).Take(15).ToList();
-            return View(list.ToList());
+            streamList = streamList.Where(t => t.StreamName.Contains(searchString) || t.User.Name.Contains(searchString) || t.Course.Name.Contains(searchString));
+            
+            return View(streamList.ToList());
         }
 
         public async Task<IActionResult> Teachers()

@@ -1,8 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-
-@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Identity
 @inject  UserManager<OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser> UserManager
 @{
     Layout = null;
@@ -31,7 +27,7 @@
                             <form asp-controller="Dashboard" asp-action="Index" method="get">
                                 <a class="nav-link nav-link-search"><i class="ficon ft-search"></i></a>
                                 <div class="search-input">
-                                    <input class="input" type="text" name="searchString" value="@ViewData["currentFilter"]" placeholder="Explore Online Classes...">
+                                    <input class="input" type="text" name="searchString" value="" placeholder="Explore Online Classes...">
                                 </div>
                             </form>
                            
@@ -167,56 +163,7 @@
                                         </div>
                                     </div>
                                 </a>
-                                <a href="javascript:void(0)">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <span class="avatar avatar-sm avatar-busy rounded-circle">
-                                                <img src="~/app-assets/images/portrait/small/avatar-s-2.png" alt="avatar"><i></i>
-                                            </span>
-                                        </div>
-                                        <div class="media-body">
-                                            <h6 class="media-heading">Bret Lezama</h6>
-                                            <p class="notification-text font-small-3 text-muted">I have seen your work, there is</p>
-                                            <small>
-                                                <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">Tuesday</time>
-                                            </small>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="javascript:void(0)">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <span class="avatar avatar-sm avatar-online rounded-circle">
-                                                <img src="~/app-assets/images/portrait/small/avatar-s-3.png" alt="avatar"><i></i>
-                                            </span>
-                                        </div>
-                                        <div class="media-body">
-                                            <h6 class="media-heading">Carie Berra</h6>
-                                            <p class="notification-text font-small-3 text-muted">Can we have call in this week ?</p>
-                                            <small>
-                                                <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">Friday</time>
-                                            </small>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="javascript:void(0)">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <span class="avatar avatar-sm avatar-away rounded-circle">
-                                                <img src="~/app-assets/images/portrait/small/avatar-s-6.png" alt="avatar"><i></i>
-                                            </span>
-                                        </div>
-                                        <div class="media-body">
-                                            <h6 class="media-heading">Eric Alsobrook</h6>
-                                            <p class="notification-text font-small-3 text-muted">We have project party this saturday.</p>
-                                            <small>
-                                                <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00">last month</time>
-                                            </small>
-                                        </div>
-                                    </div>
-                                </a>
                             </li>
-                            <li class="dropdown-menu-footer"><a class="dropdown-item text-muted text-center" href="javascript:void(0)">Read all messages</a></li>
                         </ul>
                     </li>
                 </ul>
