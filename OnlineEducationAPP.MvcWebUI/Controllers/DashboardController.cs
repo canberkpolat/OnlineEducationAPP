@@ -16,41 +16,65 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
     public class DashboardController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IStreamRepository streamRepository;
-        public DashboardController(UserManager<ApplicationUser> _userManager, IStreamRepository _streamRepository)
+        private readonly IUnitOfWork unitOfWork;
+
+        public DashboardController(UserManager<ApplicationUser> _userManager, IUnitOfWork _unitOfWork)
         {
-            streamRepository = _streamRepository;
             userManager = _userManager;
+            unitOfWork = _unitOfWork;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
-            var streams = streamRepository.GetAll().OrderByDescending(p => p.Id).Take(15).ToList();
-            return View(streams);
+            
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var list = from s in unitOfWork.Streams.GetAll()
+                     select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                list = list.Where(t => t.StreamName.Contains(searchString) || t.User.Name.Contains(searchString) || t.Course.Name.Contains(searchString));
+            }
+            else
+            {
+                return View(list.OrderByDescending(p => p.Id).Take(15).ToList());
+            }
+            //var streams = unitOfWork.Streams.GetAll().OrderByDescending(p => p.Id).Take(15).ToList();
+            return View(list.ToList());
         }
 
-        public IActionResult UserCards()
+        public async Task<IActionResult> Teachers()
         {
-            var users = userManager.Users.ToList();
-            return View(users);
+            var teachers = await userManager.GetUsersInRoleAsync("Teacher");
+            return View(teachers);
+        }
+        public async Task<IActionResult> Students()
+        {
+            var students = await userManager.GetUsersInRoleAsync("Student");
+            return View(students);
         }
 
         public IActionResult ActiveStreams()
         {
-            var streams = streamRepository.GetAll().Where(stream => stream.IsActive).ToList();
+            var streams = unitOfWork.Streams.GetAll().Where(stream => stream.IsActive).ToList();
             return View(streams);
         }
 
         public IActionResult Course(int Id)
         {
-            var streams = streamRepository.GetAll().Where(stream => stream.CourseId == Id).ToList();
+            var streams = unitOfWork.Streams.GetAll().Where(stream => stream.CourseId == Id).ToList();
             return View(streams);
         }
 
         public IActionResult Category(int Id)
         {
-            var streams = streamRepository.GetAll().Where(stream => stream.Course.CategoryId == Id).ToList(); 
+            var streams = unitOfWork.Streams.GetAll().Where(stream => stream.Course.CategoryId == Id).ToList(); 
             return View("Course",streams);
         }
+
+
+
     }
 }

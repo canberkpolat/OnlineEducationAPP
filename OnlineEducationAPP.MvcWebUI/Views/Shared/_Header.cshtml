@@ -25,8 +25,19 @@
         </div>
         <div class="navbar-container container center-layout">
             <div class="collapse navbar-collapse" id="navbar-mobile">
-                <ul class="nav navbar-nav mr-auto float-left">
-                </ul>
+                
+                    <ul class="nav navbar-nav mr-auto float-left">
+                        <li class="nav-item nav-search">
+                            <form asp-controller="Dashboard" asp-action="Index" method="get">
+                                <a class="nav-link nav-link-search"><i class="ficon ft-search"></i></a>
+                                <div class="search-input">
+                                    <input class="input" type="text" name="searchString" value="@ViewData["currentFilter"]" placeholder="Explore Online Classes...">
+                                </div>
+                            </form>
+                           
+                        </li>
+                    </ul>
+                
                 <ul class="nav navbar-nav float-right">
                     <li class="dropdown dropdown-user nav-item">
                         <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
@@ -40,14 +51,14 @@
                             @if (User.IsInRole("Teacher"))
                             {
                                 <a class="dropdown-item" asp-controller="Stream" asp-action="Create"><i class="la la-television"></i> Broadcast</a>
-                                
+
                             }
                             <a class="dropdown-item" asp-controller="Profile" asp-action="Detail" asp-route-id="@UserManager.GetUserId(User)"><i class="ft-user"></i>Profile</a>
 
-                            
+
                             <a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="ft-power"></i> Logout</a>
                             @if (User.IsInRole("Admin"))
-                            {     <div class="dropdown-divider"></div>
+                            {<div class="dropdown-divider"></div>
                                 <a class="dropdown-item" asp-controller="Admin" asp-action="GetCourses"><i class="la la-television"></i> Admin Page</a>
                             }
 
