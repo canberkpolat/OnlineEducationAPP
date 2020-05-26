@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineEducationAPP.MvcWebUI.Identity;
 
 namespace OnlineEducationAPP.MvcWebUI.Migrations
 {
     [DbContext(typeof(OnlineEducationDbContext))]
-    partial class OnlineEducationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200526032752_roomname")]
+    partial class roomname
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

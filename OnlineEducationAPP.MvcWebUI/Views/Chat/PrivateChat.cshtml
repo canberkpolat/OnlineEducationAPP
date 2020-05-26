@@ -1,32 +1,25 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using OnlineEducationAPP.MvcWebUI.Identity;
-
-@inject UserManager<ApplicationUser> UserManager
-
-
-    <div class="app-content container center-layout mt-2">
-        <div class="content-wrapper">
-            <div class="row">
-                <div class="col-12 chat-application">
-                    <section class="chat-app-window">
-                        <div class="chats" id="chats">
-                            <div id="loading"><img src="~/app-assets/images/icons/loading.gif" /></div>
-                        </div>
-                    </section>
-                    <section class="chat-app-form">
-                        <div class="inline-form">
-                            <input id="room-name" type="hidden" name="roomName" value="@ViewBag.RoomId" />
-                            <input id="messageInput" type="text" class="form-control pl-1 mw-100" style="width: 100%;" placeholder="Type your message">
-                            <a id="sendButtonPrivate" class="btn btn-info ml-1">
-                                <span class="d-none d-lg-block">Send</span>
-                            </a>
-                        </div>
-                    </section>
-                </div>
+﻿<div class="app-content container center-layout mt-2">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-12 chat-application">
+                <section class="chat-app-window">
+                    <div class="chats" id="chats">
+                        <div id="loading"><img src="~/app-assets/images/icons/loading.gif" /></div>
+                    </div>
+                </section>
+                <section class="chat-app-form">
+                    <div class="inline-form">
+                        <input id="room-name" type="hidden" name="roomName" value="@ViewBag.RoomId" />
+                        <input id="messageInput" type="text" class="form-control pl-1 mw-100" style="width: 100%;" placeholder="Type your message">
+                        <button id="sendButton" type="button" class="btn btn-info ml-1">
+                            <span class="d-none d-lg-block">Send</span>
+                        </button>
+                    </div>
+                </section>
             </div>
         </div>
     </div>
+</div>
 <script>
     var userId = "@ViewBag.UserId";
-    var receiverId = "@ViewBag.ReceiverUserId";
 </script>

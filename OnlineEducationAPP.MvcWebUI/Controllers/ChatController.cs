@@ -32,19 +32,19 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [HttpPost("[action]")]
         public async Task<List<dynamic>> JoinRoom([FromBody] dynamic request)
         {
-            await _chat.Groups.AddToGroupAsync((string)request.connectionId, (string)request.roomName.ToString());
-
-            string[] tmp = ((string)request.roomName).Split("/");
-
+            string RoomName = (string)request.roomName;
+            await _chat.Groups.AddToGroupAsync((string)request.connectionId, RoomName);
             List<dynamic> response = new List<dynamic>();
-            var messages = _unitOfWork.Messages.GetAll().Where(p => (p.SenderId == tmp[0] || p.ReceiverId == tmp[0]) && (p.SenderId == tmp[1] || p.ReceiverId == tmp[1])).OrderBy(p => p.SendTime).ToList();
-            foreach(var message in messages)
+            var messages = _unitOfWork.Messages.GetAll().Where(p => p.RoomName == RoomName).OrderBy(p => p.SendTime).ToList();
+
+            foreach (var message in messages)
             {
-                if(message.ReceiveTime == null)
+                if (message.ReceiveTime == null)
                 {
                     message.ReceiveTime = DateTime.UtcNow;
                 }
-                response.Add(new { 
+                response.Add(new
+                {
                     senderId = message.SenderId,
                     senderUserName = message.SenderUser.UserName,
                     imageTag = GravatarHtmlHelper.GetString(await GravatarHtmlHelper.GravatarImage(_userManager, message.SenderUser.Email, size: 48, defaultImage: GravatarHtmlHelper.DefaultImage.Identicon, rating: GravatarHtmlHelper.Rating.PG, cssClass: "")),
@@ -52,41 +52,50 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 });
             }
             _unitOfWork.SaveChanges();
+
             return response;
         }
-        //[HttpPost("[action]/{connectionId}/{roomName}")]
-        //public async Task<IActionResult> LeaveRoom(string connectionId, string roomName)
-        //{
-        //    await _chat.Groups.RemoveFromGroupAsync(connectionId, roomName);
-        //    return Ok();
-        //}
-        [HttpPost("[action]")]
-        public async Task<IActionResult> SendMessage([FromBody]dynamic request)
-        {
-            await _chat.Clients.Group((string)request.roomName).SendAsync("ReceiveMessage", User.Identity.Name, (string)request.message);
-            return Ok();
-        }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> SendPrivateMessage([FromBody] dynamic request)
+        public async Task<IActionResult> SendMessage([FromBody] dynamic request)
         {
             var user = await _userManager.GetUserAsync(User);
+            Guid userId = Guid.Parse(user.Id);
+            string roomName = (string)request.roomName;
+            string receiverUserId = null;
+            if (roomName.Contains("/"))
+            {
+                string[] tmp = roomName.Split("/");
+                Guid user1,user2;
+                if(Guid.TryParse(tmp[0], out user1) && Guid.TryParse(tmp[1], out user2))
+                {
+                    if (userId.Equals(user1))
+                    {
+                        receiverUserId = user2.ToString();
+                    }else if (userId.Equals(user2))
+                    {
+                        receiverUserId = user1.ToString();
+                    }else
+                    {
+                        throw new Exception("Not authorized!");
+                    }
+                }
+            }
+            string message = (string)request.message;
+            
             var imageTag = await GravatarHtmlHelper.GravatarImage(_userManager, user.Email, size: 48, defaultImage: GravatarHtmlHelper.DefaultImage.Identicon, rating: GravatarHtmlHelper.Rating.PG, cssClass: "");
-
-            var receiverUser = await _userManager.FindByIdAsync((string)request.receiverId);
 
             var msg = new Message
             {
-                SenderUser = user,
-                ReceiverUser = receiverUser,
-                ReceiverId = (string)request.receiverId,
+                ReceiverId = receiverUserId,
                 SenderId = user.Id,
-                Messages = (string)request.message,
+                Messages = message,
                 SendTime = DateTime.UtcNow,
+                RoomName = roomName
             };
             _unitOfWork.Messages.Add(msg);
             
-            await _chat.Clients.Group((string)request.roomName).SendAsync("ReceivePrivateMessage", User.Identity.Name, user.Id, GravatarHtmlHelper.GetString(imageTag), (string)request.message);
+            await _chat.Clients.Group(roomName).SendAsync("ReceiveMessage", User.Identity.Name, user.Id, GravatarHtmlHelper.GetString(imageTag), message);
             _unitOfWork.SaveChanges();
             return Ok();
         }
@@ -94,34 +103,25 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [Route("[action]/{receiverUserId}")]
         public async Task<IActionResult> PrivateChat(string receiverUserId)
         {
-            try
+            var user = await _userManager.GetUserAsync(User);
+
+            ViewBag.RoomId = GetRoomName(user.Id, receiverUserId);
+            ViewBag.UserId = user.Id;
+            return View();
+        }
+
+        public string GetRoomName(string xid, string yid)
+        {
+            var roomName = "";
+            if (xid.CompareTo(yid) == -1)
             {
-                var user = await _userManager.GetUserAsync(User);
-                 
-
-                var roomId = "";
-                if (receiverUserId.CompareTo(user.Id) == -1)
-                {
-                    roomId = user.Id + "/" + receiverUserId;
-                }
-                else
-                {
-                    roomId = receiverUserId + "/" + user.Id;
-                }
-
-                ViewBag.RoomId = roomId;
-                ViewBag.UserId = user.Id;
-                ViewBag.ReceiverUserId = receiverUserId;
-                return View();
+                roomName = yid + "/" + xid;
             }
-            catch (Exception ex)
+            else
             {
-
-                throw;
+                roomName = xid + "/" + yid;
             }
-         
-
-            
+            return roomName;
         }
     }
 }

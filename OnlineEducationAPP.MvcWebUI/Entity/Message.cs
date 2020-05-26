@@ -20,6 +20,6 @@ namespace OnlineEducationAPP.MvcWebUI.Entity
 
         public string SenderId { get; set; }
         public virtual ApplicationUser SenderUser { get; set; }
-
+        public string RoomName { get; set; }
     }
 }
