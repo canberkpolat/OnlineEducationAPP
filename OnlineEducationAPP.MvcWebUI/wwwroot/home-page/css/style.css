@@ -410,7 +410,7 @@ h3 {
 /* line 28, ../../Arafath/CL/December/233. Startup/HTML/scss/_btn.scss */
 .boxed-btn3 {
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#0181f5+0,5db2ff+100 */
-    background: #615CFD;
+    background: #ff5e13;
     color: #fff;
     display: inline-block;
     padding: 12px 33px;
@@ -924,23 +924,30 @@ h3 {
 /* line 30, ../../Arafath/CL/December/233. Startup/HTML/scss/_header.scss */
 .header-area .main-header-area .logo-img {
     text-align: left;
+    width:200px;
+    height:auto;
+}
+.logo-img-size {
+    width: 200px;
+    height: auto;
 }
 
-@media (max-width: 767px) {
+
+@media (max-width: 200px) {
     /* line 30, ../../Arafath/CL/December/233. Startup/HTML/scss/_header.scss */
     .header-area .main-header-area .logo-img {
         text-align: left;
     }
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 100px) and (max-width: 200px) {
     /* line 30, ../../Arafath/CL/December/233. Startup/HTML/scss/_header.scss */
     .header-area .main-header-area .logo-img {
         text-align: left;
     }
 }
 
-@media (min-width: 992px) and (max-width: 1200px) {
+@media (min-width: 100px) and (max-width: 200px) {
     /* line 30, ../../Arafath/CL/December/233. Startup/HTML/scss/_header.scss */
     .header-area .main-header-area .logo-img {
         text-align: left;
