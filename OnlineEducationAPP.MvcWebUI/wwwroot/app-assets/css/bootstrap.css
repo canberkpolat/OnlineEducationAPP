@@ -2723,7 +2723,10 @@ tbody.collapse.show {
   white-space: nowrap; }
   .navbar-brand:hover, .navbar-brand:focus {
     text-decoration: none; }
-
+.header-logo{
+    width:140px;
+    height:auto;
+}
 .navbar-nav {
   display: flex;
   flex-direction: column;
@@ -5905,7 +5908,10 @@ button.bg-dark:focus {
 
 .text-center {
   text-align: center !important; }
-
+.logo-img-size{
+    width:200px;
+    height:auto;
+}
 @media (min-width: 576px) {
   .text-sm-left {
     text-align: left !important; }

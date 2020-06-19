@@ -732,7 +732,7 @@ select.form-control {
     padding: 0rem 0.85rem;
     transition: 300ms ease all; }
     .header-navbar .navbar-header .navbar-brand {
-      padding: 17px 0px;
+      padding: 0px 0px;
       margin-right: 0; }
       .header-navbar .navbar-header .navbar-brand .brand-logo {
         width: 36px; }
