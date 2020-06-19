@@ -144,6 +144,7 @@
                     url: '/Calendar/DeleteEvent',
                     data: { 'eventId': selectedEvent.extendedProps.eventId },
                     success: function () {
+                            $('#calendar').empty();
                             FetchEvents();
                             $('#eventModal').modal('hide');
                     },
@@ -272,6 +273,7 @@
                 url: '/Calendar/SaveEvent',
                 data: data,
                 success: function () {
+                    $('#calendar').empty();
                     FetchEvents();
                     $('#saveEventModal').modal('hide');
                     $('#updateEventModal').modal('hide');
