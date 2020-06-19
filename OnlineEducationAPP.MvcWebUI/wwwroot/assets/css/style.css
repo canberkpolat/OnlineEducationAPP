@@ -47,6 +47,14 @@ body {
 	width: 360px;
 	background-color: transparent !important;
 }
+.dot {
+    height: 4px;
+    width: 4px;
+    background-color: black;
+    border-radius: 50%;
+    display: inline-block;
+    margin-top:7px;
+}
 /*2C303B*/
 
 .stream-container {

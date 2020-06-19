@@ -28,7 +28,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         {
             ViewData["CurrentFilter"] = searchString;
 
-            var streamList = from stream in unitOfWork.Streams.GetAll()
+            var streamList = from stream in unitOfWork.Streams.GetAll().Include(t => t.User).Include(t => t.Course).ThenInclude(t=>t.Category)
                              select stream;
 
             if (String.IsNullOrEmpty(searchString))
@@ -42,33 +42,36 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
         public async Task<IActionResult> Teachers()
         {
+            var currentUserId = userManager.GetUserId(User);
             var teachers = await userManager.GetUsersInRoleAsync("Teacher");
+            teachers = teachers.Where(t => t.Id != currentUserId).ToList();
             return View(teachers);
         }
         public async Task<IActionResult> Students()
         {
+            var currentUserId = userManager.GetUserId(User);
             var students = await userManager.GetUsersInRoleAsync("Student");
+            students = students.Where(t => t.Id != currentUserId).ToList();
             return View(students);
         }
 
         public IActionResult ActiveStreams()
         {
-            var streams = unitOfWork.Streams.GetAll().Where(stream => stream.IsActive).ToList();
+            var streams = unitOfWork.Streams.GetAll().Include(t => t.User).Include(t => t.Course).Where(stream => stream.IsActive).ToList();
             return View(streams);
         }
 
         public IActionResult Course(int Id)
         {
-            var streams = unitOfWork.Streams.GetAll().Where(stream => stream.CourseId == Id).ToList();
+            var streams = unitOfWork.Streams.GetAll().Include(t => t.User).Include(t => t.Course).ThenInclude(t=>t.Category).Where(stream => stream.CourseId == Id).ToList();
             return View(streams);
         }
 
         public IActionResult Category(int Id)
         {
-            var streams = unitOfWork.Streams.GetAll().Where(stream => stream.Course.CategoryId == Id).ToList(); 
+            var streams = unitOfWork.Streams.GetAll().Include(t => t.User).Include(t => t.Course).Where(stream => stream.Course.CategoryId == Id).ToList(); 
             return View("Course",streams);
         }
-
 
 
     }

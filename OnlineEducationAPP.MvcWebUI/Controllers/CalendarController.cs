@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using OnlineEducationAPP.MvcWebUI.Entity;
+using OnlineEducationAPP.MvcWebUI.Hubs;
 using OnlineEducationAPP.MvcWebUI.Identity;
 using OnlineEducationAPP.MvcWebUI.Repository.Abstract;
 
@@ -15,59 +18,132 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
     {
         private IUnitOfWork unitOfWork;
         private UserManager<ApplicationUser> userManager;
-        
-        public CalendarController(IUnitOfWork _unitOfWork, UserManager<ApplicationUser> _userManager)
+        private readonly IHubContext<NotificationUserHub> notificationUserHubContext;
+
+
+        public CalendarController(IUnitOfWork _unitOfWork, UserManager<ApplicationUser> _userManager, IHubContext<NotificationUserHub> _notificationUserHubContext)
         {
             unitOfWork = _unitOfWork;
             userManager = _userManager;
-        }
-        [Authorize(Roles = "Teacher,Admin")]
-        [Route("Calendar/Event/Create")]
-        [HttpPost]
-        public void Create([FromBody] Event a)
-        {
-            unitOfWork.Events.Add(a);
-            unitOfWork.SaveChanges();
+            notificationUserHubContext = _notificationUserHubContext;
         }
 
-        [Authorize(Roles = "Student,Teacher,Admin")]
-        [Route("Calendar/Event/List")]
-        [HttpGet]
-        public IActionResult List(int Id)
+        public IActionResult Index()
         {
-            var events = unitOfWork.Events.GetAll().ToList();
-            return View(events);
+            return View();
         }
 
-        [Authorize(Roles = "Teacher,Admin")]
-        [HttpPost]
-        public dynamic Create(int courseId, string streamName)
+
+        public List<dynamic> GetEvents()
         {
-            var userID = userManager.GetUserId(User);
+            var events = unitOfWork.Events.GetAll().Include(t=>t.User).Include(t => t.Course).ToList();
 
-            string streamKey = Guid.NewGuid().ToString();
+            var response = new List<dynamic>();
 
-            var model = new Stream
+            foreach (var e in events)
             {
-                CourseId = courseId,
-                StartTime = null,
-                IsActive = false,
-                StreamName = streamName,
-                UserId = userID,
-                LiveStreamEndpoint = "https://onlineeducationapp.canberkpolat.com:8443/live/",
-                VideoOnDemandEndpoint = "https://onlineeducationapp.canberkpolat.com:8443/vod/",
-                StreamKey = streamKey
-            };
-            unitOfWork.Streams.Add(model);
+                response.Add(new
+                {
+                    Id = e.Id,
+                    Text = e.Text,
+                    Description = e.Description,
+                    Start = e.DateBegin,
+                    End = e.DateEnd,
+                    Name = e.User.Name,
+                    SurName = e.User.Surname,
+                    Course = e.Course.Name,
+                    CourseId = e.CourseId
+                });
+            }
+
+            return response;
+        }
+
+        public async Task<IActionResult> SaveEvent(Event e)
+        {
+            var user = await userManager.GetUserAsync(User);
+            e.UserId = user.Id;
+
+            if (e.Id > 0)
+            {
+                var eventt = unitOfWork.Events.Get(e.Id);
+                if (eventt != null)
+                {
+                    eventt.Text = e.Text;
+                    eventt.Description = e.Description;
+                    eventt.DateBegin = e.DateBegin;
+                    eventt.DateEnd = e.DateEnd;
+                    eventt.UserId = user.Id;
+                }
+            }
+            else
+            {
+                unitOfWork.Events.Add(e);
+            }
+
             unitOfWork.SaveChanges();
 
-            var response = new
+            await notificationUserHubContext.Clients.All.SendAsync("sendCalendarNotification", user.Name, user.Surname, e.Description);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult DeleteEvent(int eventId)
+        {
+
+            var eventt = unitOfWork.Events.Get(eventId);
+            if (eventt != null)
             {
-                StreamEndPoint = "rmtp://onlineeducationapp.canberkpolat.com:8080/live",
-                StreamKey = streamKey
+                unitOfWork.Events.Delete(eventt);
+                unitOfWork.SaveChanges();
+            }
+            return Ok();
+        }
+
+        public async Task<IActionResult> IsTeacherOrAdmin()
+        {
+            var currentUser = await userManager.GetUserAsync(User);
+
+            var roles = await userManager.GetRolesAsync(currentUser);
+
+            if (roles.Contains("Teacher") || roles.Contains("Admin"))
+            {
+                return Ok();
+            }
+
+            throw new Exception();
+        }
+
+        public async Task<IActionResult> IsStudent()
+        {
+            var currentUser = await userManager.GetUserAsync(User);
+
+            var roles = await userManager.GetRolesAsync(currentUser);
+
+            if (roles.Contains("Student"))
+                return Ok();
+
+            throw new Exception();
+        }
+
+
+        public List<dynamic> GetCourseList()
+        {
+            var response = new List<dynamic>();
+            var courses = unitOfWork.Courses.GetAll().ToList();
+
+            foreach (var course in courses)
+            {
+                response.Add(new
+                {
+                    courseId = course.Id,
+                    courseName = course.Name
+                });
             };
 
             return response;
         }
+
     }
 }

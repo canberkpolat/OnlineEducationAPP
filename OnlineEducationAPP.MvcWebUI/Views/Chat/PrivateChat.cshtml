@@ -1,4 +1,7 @@
-﻿<div class="app-content container center-layout mt-2">
+﻿
+
+
+<div class="app-content container center-layout mt-2">
     <div class="content-wrapper">
         <div class="row">
             <div class="col-12 chat-application" style="height: 780px;">
@@ -10,6 +13,7 @@
                 <section class="chat-app-form">
                     <div class="inline-form">
                         <input id="room-name" type="hidden" name="roomName" value="@ViewBag.RoomId" />
+                        <input id="receiver-user-id" type="hidden" name="roomName" value="@ViewBag.ReceiverId" />
                         <input id="messageInput" type="text" class="form-control pl-1 mw-100" style="width: 100%;" placeholder="Type your message">
                         <button id="sendButton" type="button" class="btn btn-info ml-1">
                             <span class="d-none d-lg-block">Send</span>

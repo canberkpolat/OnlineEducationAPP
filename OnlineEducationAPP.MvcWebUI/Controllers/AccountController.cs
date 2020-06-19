@@ -106,7 +106,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
                 {
                     if (!await roleManager.RoleExistsAsync("Student"))
                     {
-                        var role = new IdentityRole("Student");
+                        var role = new IdentityRole("Student"); 
                         await roleManager.CreateAsync(role);
                     }
                     await userManager.AddToRoleAsync(user, "Student");

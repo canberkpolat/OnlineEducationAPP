@@ -17,6 +17,7 @@ using OnlineEducationAPP.MvcWebUI.Repository.Concrete.EntityFrameworkCore;
 using OnlineEducationAPP.MvcWebUI.Hubs;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using OnlineEducationAPP.MvcWebUI.Helpers.SignalRNotification;
 
 namespace OnlineEducationAPP.MvcWebUI
 {
@@ -46,14 +47,13 @@ namespace OnlineEducationAPP.MvcWebUI
                 });
             });
 
-          
+
             services.AddDbContext<OnlineEducationDbContext>(
-                options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("OnlineEducationAppConnection")));
-            services.AddTransient<ICourseRepository, EfCourseRepository>();
-            services.AddTransient<ICategoryRepository, EfCategoryRepository>();
-            services.AddTransient<IStreamRepository, EfStreamRepository>();
-            services.AddTransient<IUserRepository, EfUserRepository>();
+                options => options.UseSqlServer(Configuration.GetConnectionString("OnlineEducationAppConnection")));
+
             services.AddTransient<IUnitOfWork, EfUnitOfWork>();
+
+            services.AddTransient<IUserConnectionManager, UserConnectionManager>();
 
 
 
@@ -109,7 +109,10 @@ namespace OnlineEducationAPP.MvcWebUI
 
 
             services.AddMvc();
-            services.AddSignalR();
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
 
         }
 
@@ -126,7 +129,7 @@ namespace OnlineEducationAPP.MvcWebUI
             {
                 app.UseStatusCodePagesWithRedirects("/Error/{0}");
             }
-            
+
             //wwwroot
             app.UseStaticFiles();
 
@@ -135,6 +138,7 @@ namespace OnlineEducationAPP.MvcWebUI
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("/chatHub");
+                routes.MapHub<NotificationUserHub>("/NotificationUserHub");
             });
 
             app.UseMvc(routes =>

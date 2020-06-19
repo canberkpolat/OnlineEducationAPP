@@ -16,6 +16,7 @@ namespace OnlineEducationAPP.MvcWebUI.Entity
         public string VideoOnDemandEndpoint { get; set; }
         public string StreamKey { get; set; }
         public bool IsActive { get; set; }
+        public int AmaountShown { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public DateTime? UpdateTime { get; set; }

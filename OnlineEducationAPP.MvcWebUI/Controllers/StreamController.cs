@@ -36,6 +36,8 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         public IActionResult Stream(int Id)
         {
             var stream = unitOfWork.Streams.Get(Id);
+            stream.AmaountShown++;
+            unitOfWork.SaveChanges();
             ViewBag.UserId = _userManager.GetUserId(User);
             return View(stream);
         }

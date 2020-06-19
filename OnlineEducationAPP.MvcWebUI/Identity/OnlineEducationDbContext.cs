@@ -18,6 +18,7 @@ namespace OnlineEducationAPP.MvcWebUI.Identity
         public DbSet<Event> Events { get; set; }
         public DbSet<Message> Messages { get; set; }
 
+        
         public OnlineEducationDbContext(DbContextOptions<OnlineEducationDbContext> options) : base(options)
         {
 

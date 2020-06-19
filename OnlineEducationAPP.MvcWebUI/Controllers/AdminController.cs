@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OnlineEducationAPP.MvcWebUI.Entity;
 using OnlineEducationAPP.MvcWebUI.Identity;
 using OnlineEducationAPP.MvcWebUI.Models;
@@ -36,7 +37,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
         public IActionResult GetCourses()
         {
-            var courses = _unitOfWork.Courses.GetAll().ToList();
+            var courses = _unitOfWork.Courses.GetAll().Include(t=>t.Category).ToList();
 
             return View(courses);
         }

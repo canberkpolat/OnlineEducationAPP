@@ -3,55 +3,72 @@
 @using OnlineEducationAPP.MvcWebUI.Identity;
 
 @inject UserManager<ApplicationUser> UserManager
+
+
+@{
+    var now = DateTime.Now;
+}
 <div class="app-content container center-layout mt-2">
     <div class="content-wrapper">
         <section id="user-profile-cards-with-stats" class="row mt-2">
+
+            <input id="current-user-id" type="hidden" value="@UserManager.GetUserId(User)" />
             @foreach (var stream in Model.Where(p => p.IsActive == true))
             {
-            <div class="card profile-card-with-stats stream-container">
-                <div class="live-tag-container">
-                    <div class="live-tag">
-                        <div class="live-tag-text text-bold-600">LIVE</div>
+                <div class="card profile-card-with-stats stream-container">
+                    <div class="live-tag-container">
+                        <div class="live-tag">
+                            <div class="live-tag-text text-bold-600">LIVE</div>
+                        </div>
                     </div>
-                </div>
-                <div class="card-content stream-body">
-                    <a href="/Stream/@stream.Id">
-                        <img class="card-img-top img-fluid backup_picture" src="@(stream.LiveStreamEndpoint+stream.StreamKey+".png")">
-                    </a>
-                    <div class="card-body">
-                        <div class="gravatar-container">
-                            @await GravatarHtmlHelper.GravatarImage(UserManager, stream.User.Email,size: 48,defaultImage: GravatarHtmlHelper.DefaultImage.Identicon,rating: GravatarHtmlHelper.Rating.PG,cssClass: "avatar gravatar")
-                            <div>
-                                <a href="/Stream/@stream.Id"><h2 class="text-bold-600">@stream.StreamName</h2></a>
-                                <a href="/Stream/@stream.Id"><h4 class="text-bold-200">@stream.User.Name @stream.User.Surname</h4></a>
-                                <h4 class="text-bold-200 gray-text"><a href="/Dashboard/Course/@stream.Course.Id">@stream.Course.Name</a> in <a href="/Dashboard/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
+                    <div class="card-content stream-body">
+                        <a href="/Stream/@stream.Id">
+                            <img class="card-img-top img-fluid backup_picture" src="@(stream.LiveStreamEndpoint+stream.StreamKey+".png")">
+                        </a>
+                        <div class="card-body">
+                            <div class="gravatar-container">
+                                @await GravatarHtmlHelper.GravatarImage(UserManager, stream.User.Email, size: 48, defaultImage: GravatarHtmlHelper.DefaultImage.Identicon, rating: GravatarHtmlHelper.Rating.PG, cssClass: "avatar gravatar")
+                                <div>
+                                    <a href="/Stream/@stream.Id"><h2 class="text-bold-600">@stream.StreamName</h2></a>
+                                    <a href="/Stream/@stream.Id"><h4 class="text-bold-200">@stream.User.Name @stream.User.Surname</h4></a>
+                                    <h4 class="text-bold-200 gray-text"><a href="/Dashboard/Course/@stream.Course.Id">@stream.Course.Name</a> in <a href="/Dashboard/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             }
         </section>
         <section id="user-profile-cards-with-stats" class="row mt-2">
+
             @foreach (var stream in Model.Where(p => p.IsActive == false))
             {
-            <div class="card profile-card-with-stats stream-container">
-                <div class="card-content stream-body">
-                    <a href="/Stream/@stream.Id">
-                        <img class="card-img-top img-fluid backup_picture" src="@(stream.VideoOnDemandEndpoint+stream.StreamKey+".png")">
-                    </a>
-                    <div class="card-body">
-                        <div class="gravatar-container">
-                            @await GravatarHtmlHelper.GravatarImage(UserManager, stream.User.Email,size: 48,defaultImage: GravatarHtmlHelper.DefaultImage.Identicon,rating: GravatarHtmlHelper.Rating.PG,cssClass: "avatar gravatar")
-                            <div>
-                                <a href="/Stream/@stream.Id"><h2 class="text-bold-600">@stream.StreamName</h2></a>
-                                <a href="/Stream/@stream.Id"><h4 class="text-bold-200">@stream.User.Name @stream.User.Surname</h4></a>
-                                <h4 class="text-bold-200 gray-text"><a href="/Dashboard/Course/@stream.Course.Id">@stream.Course.Name</a> in <a href="/Dashboard/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
+
+
+                TimeSpan elapsed = now.Subtract(stream.StartTime.Value);
+
+                <div class="card profile-card-with-stats stream-container">
+                    <div class="card-content stream-body">
+                        <a href="/Stream/@stream.Id">
+                            <img class="card-img-top img-fluid backup_picture" src="@(stream.VideoOnDemandEndpoint+stream.StreamKey+".png")">
+                        </a>
+                        <div class="card-body">
+                            <div class="gravatar-container">
+                                @await GravatarHtmlHelper.GravatarImage(UserManager, stream.User.Email, size: 48, defaultImage: GravatarHtmlHelper.DefaultImage.Identicon, rating: GravatarHtmlHelper.Rating.PG, cssClass: "avatar gravatar")
+                                <div>
+                                    <a href="/Stream/@stream.Id"><h2 class="text-bold-600">@stream.StreamName</h2></a>
+                                    <a href="/Stream/@stream.Id"><h4 class="text-bold-200">@stream.User.Name @stream.User.Surname</h4></a>
+                                    <h4 class="text-bold-200 gray-text"><a href="/Dashboard/Course/@stream.Course.Id">@stream.Course.Name</a> in <a href="/Dashboard/Category/@stream.Course.Category.Id">@stream.Course.Category.Name</a></h4>
+                                    <div class="row" style="padding-left:15px">
+                                        <h4 class="text-bold-100 gray-text" style="font-size:1.10rem;"><i class="ft-eye"></i>&nbsp; @stream.AmaountShown Views </h4>&nbsp;
+                                        <span class="dot"></span>
+                                        <h4 class="text-bold-100 gray-text" style="font-size:1.10rem;">&nbsp; @elapsed.TotalDays.ToString("0") days ago</h4>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             }
         </section>
     </div>

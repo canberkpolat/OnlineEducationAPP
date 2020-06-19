@@ -1,0 +1,479 @@
+﻿@model Event
+@{
+    ViewData["Title"] = "Index";
+}
+@*<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>*@
+
+<script>
+    $(document).ready(function () {
+        var events = [];
+        var courses = [];
+        var selectedEvent = null;
+        var isTeacherOrAdmin = false;
+
+        IsTeacherOrAdmin();
+        GetCourseList();
+        console.log(courses);
+        FetchEvents();
+        function FetchEvents() {
+            events = [];
+            $.ajax({
+                type: "GET",
+                url: "/Calendar/GetEvents",
+                success: function (data) {
+                    $.each(data, function (i) {
+                        events.push({
+                            eventId: data[i].id,
+                            title: data[i].text,
+                            description: data[i].description,
+                            start: data[i].start,
+                            end: data[i].end,
+                            name: data[i].name,
+                            surname: data[i].surName,
+                            course: data[i].course,
+                            courseId: data[i].courseId
+                        });
+                    })
+                    GenerateCalender(events);
+                },
+                error: function (hata) {
+                    alert(hata.status);
+                    alert(hata.statusCode);
+                }
+            });
+        }
+
+        function GetCourseList() {
+            courses = [];
+            $.ajax({
+                type: "GET",
+                url: "/Calendar/GetCourseList",
+                success: function (data) {
+                    $.each(data, function (i) {
+                        courses.push({
+                            courseId: data[i].courseId,
+                            courseName: data[i].courseName
+                        });
+                    })
+                },
+                error: function (hata) {
+                    alert(hata.status);
+                    alert(hata.statusCode);
+                }
+            });
+        }
+
+        function IsTeacherOrAdmin() {
+            $.ajax({
+                type: "GET",
+                url: '/Calendar/IsTeacherOrAdmin',
+                success: function () {
+                    isTeacherOrAdmin = true;
+                },
+                error: function () {
+                    isTeacherOrAdmin = false;
+                }
+            })
+        }
+
+        function GenerateCalender(events) {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['interaction', 'dayGrid'],
+                header: {
+                    left: 'prevYear,prev,next,nextYear today',
+                    center: 'title',
+                    right: 'dayGridMonth,dayGridWeek,dayGridDay'
+                },
+                defaultDate: new Date(),
+                navLinks: true, // can click day/week names to navigate views
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+                eventColor: 'black',
+                eventBackgroundColor: 'powderblue',
+                events: events,
+                eventClick: function (info) {
+                    selectedEvent = info.event;
+                    var startTime = info.event.start;
+                    var endTime = info.event.end;
+
+                    $('#eventModal #eventTitle').html('<h3 style = "font-weight:bold;">' + info.event.title + ' </h3>');
+                    var $description = $('<div/>');
+                    $description.append($('<p/>').html('<b>Start: </b>' + startTime.format()));
+                    $description.append($('<p/>').html('<b>Teacher: </b>' + info.event.extendedProps.name + ' ' + info.event.extendedProps.surname));
+                    $description.append($('<p/>').html('<b>Course: </b>' + info.event.extendedProps.course));
+                    if (info.event.end != null) {
+                        $description.append($('<p/>').html('<b>End: </b>' + endTime.format()));
+                    }
+                    $description.append($('<p/>').html('<b>Description: </b>' + info.event.extendedProps.description));
+                    $('#eventModal #pDetails').empty().html($description);
+                    $('#eventModal').modal();
+                },
+                selectable: true,
+                select: function (start, end) {
+                    selectedEvent = {
+                        eventId: 0,
+                        title: '',
+                        description: '',
+                        start: start,
+                        end: end,
+                        courseId: 0,
+                    };
+                    OpenAddForm();
+                    courses = [];
+                },
+                editable: isTeacherOrAdmin ? true : false,
+                eventDrop: function (event) {
+                    var startTime = event.event.start.format();
+                    var endTime = event.event.end.format();
+                    var data = {
+                        Id: event.event.extendedProps.eventId,
+                        Text: event.event.title,
+                        DateBegin: startTime,
+                        DateEnd: endTime,
+                        Description: event.event.extendedProps.description,
+                        CourseId: event.event.extendedProps.courseId,
+                    };
+                    SaveEvent(data);
+                }
+            });
+
+            calendar.render();
+        }
+
+        $('#btnEdit').click(function () {
+            OpenEditForm();
+        })
+
+        $('#btnDelete').click(function () {
+            if (selectedEvent != null && confirm('Are you sure ?')) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Calendar/DeleteEvent',
+                    data: { 'eventId': selectedEvent.extendedProps.eventId },
+                    success: function () {
+                            $('#calendar').empty();
+                            FetchEvents();
+                            $('#eventModal').modal('hide');
+                    },
+                    error: function () {
+                        alert('Failed');
+                    }
+                })
+            }
+        })
+
+        function OpenAddForm() {
+            if (selectedEvent != null) {
+                $('#saveStartTime').val(selectedEvent.start.startStr);
+                $('#saveEndTime').val(selectedEvent.start.endStr);
+                $('#courseId').val(selectedEvent.courseId);
+                $('#saveEventId').val(selectedEvent.eventId);
+                $('#saveTitle').val(selectedEvent.title);
+                $('#saveDescription').val(selectedEvent.description);
+                for (i = 0; i < courses.length; i++) {
+
+                    $('#courseList').append($('<option>', {
+                        value: courses[i].courseId,
+                        text: courses[i].courseName
+                    }));
+                }
+                $('#saveEventModal').modal();
+            }
+
+        }
+        function OpenEditForm() {
+            if (selectedEvent != null) {
+
+                $('#courseId').val(selectedEvent.extendedProps.courseId);
+                $('#hdEventId').val(selectedEvent.extendedProps.eventId);
+                $('#title').val(selectedEvent.title);
+                $('#startTime').val(selectedEvent.start.format());
+                $('#endTime').val(selectedEvent.end.format());
+                $('#course').val(selectedEvent.extendedProps.course);
+                $('#description').val(selectedEvent.extendedProps.description);
+            }
+            $('#eventModal').modal('hide');
+            $('#updateEventModal').modal();
+
+        }
+
+
+        $('#btnUpdateSave').click(function () {
+            if ($('#title').val().trim() == "") {
+                alert("Title is Required");
+                return;
+            }
+            if ($('#startTime').val().trim() == "") {
+                alert("Start Time is Required");
+                return;
+            }
+            if ($('#endTime').val().trim() == "") {
+                alert("End Time is Required");
+                return;
+            }
+            if ($('#description').val().trim() == "") {
+                alert("Description is Required");
+                return;
+            }
+            else {
+                var startDate = moment($('#startTime').val(), "YYYY/MM/DD HH:mm").toDate();
+                var endDate = moment($('#endTime').val(), "YYYY/MM/DD HH:mm").toDate();
+
+                if (startDate > endDate) {
+                    alert("Invalid End Date");
+                    return;
+                }
+            }
+            var data = {
+                Id: $('#hdEventId').val(),
+                Text: $('#title').val(),
+                DateBegin: $('#startTime').val(),
+                DateEnd: $('#endTime').val(),
+                Description: $('#description').val(),
+                CourseId: $('#courseId').val()
+            }
+            SaveEvent(data);
+        });
+
+        $('#btnSave').click(function () {
+            if ($('#saveTitle').val().trim() == "") {
+                alert("Title is Required");
+                return;
+            }
+            if ($('#saveStartTime').val().trim() == "") {
+                alert("Start Time is Required");
+                return;
+            }
+            if ($('#saveEndTime').val().trim() == "") {
+                alert("End Time is Required");
+                return;
+            }
+            if ($('#saveDescription').val().trim() == "") {
+                alert("Description is Required");
+                return;
+            }
+            else {
+                var startDate = moment($('#saveStartTime').val(), "YYYY/MM/DD HH:mm").toDate();
+                var endDate = moment($('#saveEndTime').val(), "YYYY/MM/DD HH:mm").toDate();
+
+                if (startDate > endDate) {
+                    alert("Invalid End Date");
+                    return;
+                }
+            }
+            var data = {
+                Id: $('#saveEventId').val(),
+                Text: $('#saveTitle').val(),
+                DateBegin: $('#saveStartTime').val(),
+                DateEnd: $('#saveEndTime').val(),
+                Description: $('#saveDescription').val(),
+                CourseId: $('#courseList').val()
+            }
+            SaveEvent(data);
+
+        });
+
+
+        function SaveEvent(data) {
+            $.ajax({
+                type: "POST",
+                url: '/Calendar/SaveEvent',
+                data: data,
+                success: function () {
+                    $('#calendar').empty();
+                    FetchEvents();
+                    $('#saveEventModal').modal('hide');
+                    $('#updateEventModal').modal('hide');
+                },
+                error: function () {
+                    alert('Failed');
+                }
+            })
+        }
+
+
+        $('#datetimepicker,#datetimepicker2,#datetimepicker3,#datetimepicker4').datetimepicker({
+
+            sideBySide: true,
+            showClose: true,
+            minDate: '0',
+            maxDate: '+2M',
+        });
+
+    });
+    Date.prototype.format = function (format) {
+        // set default format if function argument not provided
+        format = format || 'YYYY-MM-DD hh:mm';
+
+        var zeropad = function (number, length) {
+            number = number.toString();
+            length = length || 2;
+            while (number.length < length)
+                number = '0' + number;
+            return number;
+        },
+            // here you can define your formats
+            formats = {
+                YYYY: this.getFullYear(),
+                MM: zeropad(this.getMonth() + 1),
+                DD: zeropad(this.getDate()),
+                hh: zeropad(this.getHours()),
+                mm: zeropad(this.getMinutes())
+            },
+            pattern = '(' + Object.keys(formats).join(')|(') + ')';
+
+        return format.replace(new RegExp(pattern, 'g'), function (match) {
+            return formats[match];
+        });
+    };
+</script>
+
+<style>
+    #calendar {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .datetimepicker {
+        left: 710px !important;
+    }
+</style>
+
+<div class="mt-5" id=calendar></div>
+
+
+<!-- Event Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+                {
+                    <button id="btnDelete" class="btn btn-danger btn-sm pull-right ml-1">
+                        <i class="la la-trash" title="Delete"></i>
+                    </button>
+                    <button id="btnEdit" class="btn btn-info btn-sm pull-right">
+                        <i class="la la-edit" title="Edit"></i>
+                    </button>
+                }
+
+
+                <p id="pDetails"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Update Modal -->
+<div class="modal fade" id="updateEventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="font-weight:bold; font-size:1.51rem;">Update Notification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <input type="hidden" name="Id" id="hdEventId" />
+                    <input type="hidden" name="CourseId" id="courseId" />
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="Text" id="title" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Start Time</label>
+                        <div class='input-group date' id='datetimepicker'>
+                            <input id="startTime" name="DateBegin" type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>End Time</label>
+                        <div class='input-group date' id='datetimepicker2'>
+                            <input id="endTime" name="DateEnd" type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span hidden class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Course</label>
+                        <input type="text" id="course" class="form-control" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea type="text" id="description" name="Description" rows="6" class="form-control"></textarea>
+                    </div>
+                    <button id="btnUpdateSave" type="button" class="btn btn-success"><i class="la la-save"></i> Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+{
+    <!-- Save Modal -->
+    <div class="modal fade" id="saveEventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="eventTitle" style="font-weight:bold;">Create Notification</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <input type="hidden" name="Id" id="saveEventId" />
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="Text" id="saveTitle" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Start Time</label>
+                            <div class='input-group date' id='datetimepicker3'>
+                                <input id="saveStartTime" name="DateBegin" type='text' class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>End Time</label>
+                            <div class='input-group date' id='datetimepicker4'>
+                                <input id="saveEndTime" name="DateEnd" type='text' class="form-control" />
+                                <span class="input-group-addon">
+                                    <span  class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Course</label>
+                            <select id="courseList" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea type="text" id="saveDescription" name="Description" rows="6" class="form-control"></textarea>
+                        </div>
+                        <button id="btnSave" type="button" class="btn btn-success"><i class="la la-save"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

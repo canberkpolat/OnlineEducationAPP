@@ -3,12 +3,21 @@
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 var _connectionId = '';
 var roomName = $('#room-name').val();
+var receiverUserId = $('#receiver-user-id').val();
 //Disable send button until connection is established
 $("#sendButton").disabled = true;
 
 if (typeof roomName !== 'undefined') {
     connection.on("ReceiveMessage", function (username, senderId, imageTag, message) {
         addChatMessage(senderId, username, imageTag, message);
+        axios.post('/Chat/ReadMessage', { "senderId": senderId })
+            .then(res => {
+                console.log("Readed", res);
+            })
+            .catch(err => {
+                console.log("Not Readed", err);
+            })
+
     });
 
     var joinRoom = function () {
@@ -48,21 +57,39 @@ if (typeof roomName !== 'undefined') {
         }
     });
 
-    $("#sendButton").on("click", function () {
+    function SendMessage() {
         var message = $("#messageInput").val();
         $("#messageInput").val('');
-        axios.post('/Chat/SendMessage', { "message": message, "roomName": roomName})
+        axios.post('/Chat/SendMessage', { "message": message, "roomName": roomName, "receiverId": receiverUserId})
             .then(res => {
                 console.log("Message Sent", res);
             })
             .catch(err => {
                 console.log("Failed to Sent Messages", err);
             })
+    }
+    //function SendNotification() {
+    //    var url = '/Chat/SendToSpecificUser';
+    //    var body = { "receiverId": receiverUserId };
+    //    axios.post(url, body)
+    //        .then(res => {
+    //            console.log("Notification Sent", res);
+    //        })
+    //        .catch(err => {
+    //            console.log("Failed to Sent Notification", err);
+    //        })
+    //}
+
+    $("#sendButton").on("click", function () {
+        SendMessage();
+        //SendNotification();
+
         event.preventDefault();
     });
 }
 
 function addChatMessage(senderId, username, imageTag, msg) {
+   
     if (typeof $('#player').val() !== 'undefined') {
         $(".chat-application").css("height", $('#player').css("height"));
     }
@@ -86,5 +113,5 @@ function addChatMessage(senderId, username, imageTag, msg) {
                 <div class="chat-content" style="color: '+ textColor + '; background-color: ' + backgroundColor + ';">' + username + ': ' + msg + '</div>\
             </div>\
         </div>');
-    $('.chat-app-window').scrollTop($('.chat-app-window').height());
+    $('.chat-app-window').scrollTop($('.chat-app-window').height()*10);
 }

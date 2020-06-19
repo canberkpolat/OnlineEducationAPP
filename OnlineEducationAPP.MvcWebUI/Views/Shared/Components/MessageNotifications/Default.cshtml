@@ -1,12 +1,9 @@
-﻿@model  List<IGrouping<OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser,Message>>
+﻿@model List<IGrouping<OnlineEducationAPP.MvcWebUI.Identity.ApplicationUser, Message>>
 
 <li class="dropdown dropdown-notification nav-item">
     <a class="nav-link nav-link-label" href="#" data-toggle="dropdown">
         <i class="ficon ft-mail"></i>
-        @if (Model.Count != 0)
-        {
-            <span class="badge badge-pill badge-default badge-danger badge-default badge-up badge-glow">@Model.Count</span>
-        }
+        <span id="outerNotify" class="badge badge-pill badge-default badge-danger badge-default badge-up badge-glow">@(Model.Count != 0 ? Model.Count + "" : null)</span>
 
     </a>
     <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
@@ -15,21 +12,21 @@
                 <span class="grey darken-2">Messages</span>
 
             </h6>
-            @if (Model.Count != 0)
-            {
-                <span class="notification-tag badge badge-default badge-danger float-right m-0"> @Model.Count New</span>
-            }
+            <div id="innerNotify">
+                <span class="notification-tag badge badge-default badge-danger float-right m-0">@(Model.Count != 0 ? Model.Count +" New": null )</span>
+            </div>
+
 
         </li>
-        <li class="scrollable-container media-list w-100">
+        <li id="notificationList" class="scrollable-container media-list w-100">
             @if (Model.Count == 0)
             {
-            <div class="media">
-                <div class="media-body">
-                    <p class="notification-text font-medium-3 text-muted">There is no unreaded Message</p>
+                <div class="media">
+                    <div class="media-body">
+                        <p class="notification-text font-medium-3 text-muted">There is no unreaded Message</p>
+                    </div>
                 </div>
-            </div>
-              
+
             }
             @foreach (var message in Model)
             {
