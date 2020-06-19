@@ -101,20 +101,6 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
             return Ok();
         }
 
-        public async Task<IActionResult> IsTeacherOrAdmin()
-        {
-            var currentUser = await userManager.GetUserAsync(User);
-
-            var roles = await userManager.GetRolesAsync(currentUser);
-
-            if (roles.Contains("Teacher") || roles.Contains("Admin"))
-            {
-                return Ok();
-            }
-
-            throw new Exception();
-        }
-
         public async Task<IActionResult> IsStudent()
         {
             var currentUser = await userManager.GetUserAsync(User);
