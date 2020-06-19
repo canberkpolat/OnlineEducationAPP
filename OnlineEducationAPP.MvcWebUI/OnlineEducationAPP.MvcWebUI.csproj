@@ -18,10 +18,6 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\fullcalendar-4.4.2\packages\deneme\" />
-  </ItemGroup>
-
  
 
 </Project>
