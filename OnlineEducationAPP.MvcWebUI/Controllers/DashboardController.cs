@@ -71,7 +71,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
 
         public IActionResult Category(int Id)
         {
-            var streams = unitOfWork.Streams.GetAll().Include(t => t.User).Include(t => t.Course).Where(stream => stream.Course.CategoryId == Id).ToList(); 
+            var streams = unitOfWork.Streams.GetAll().Include(t => t.User).Include(t => t.Course).ThenInclude(t => t.Category).Where(stream => stream.Course.CategoryId == Id).ToList(); 
             return View("Course",streams);
         }
 
