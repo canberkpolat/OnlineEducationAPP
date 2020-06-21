@@ -53,7 +53,14 @@ else
             <section id="user-profile-cards-with-stats" class="row mt-2">
                 @foreach (var stream in Model.Where(p => p.IsActive == false))
                 {
-                    TimeSpan elapsed = now.Subtract(stream.StartTime.Value);
+                    TimeSpan elapsed = now.TimeOfDay;
+
+                    if (stream.StartTime != null)
+                    {
+                        elapsed = now.Subtract(stream.StartTime.Value);
+                    }
+
+
                     <div class="profile-card-with-stats stream-container">
                         <div class="card-content stream-body">
                             <a href="/Stream/@stream.Id">
