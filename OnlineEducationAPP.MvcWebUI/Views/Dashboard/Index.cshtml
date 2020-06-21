@@ -44,8 +44,13 @@
             @foreach (var stream in Model.Where(p => p.IsActive == false))
             {
 
+                TimeSpan elapsed = now.TimeOfDay;
 
-                TimeSpan elapsed = now.Subtract(stream.StartTime.Value);
+                if(stream.StartTime != null)
+                {
+                    elapsed = now.Subtract(stream.StartTime.Value);
+                }
+                
 
                 <div class="card profile-card-with-stats stream-container">
                     <div class="card-content stream-body">

@@ -26,6 +26,7 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+
             var courses = unitOfWork.Courses.GetAll().ToList();
             return View(courses);
         }

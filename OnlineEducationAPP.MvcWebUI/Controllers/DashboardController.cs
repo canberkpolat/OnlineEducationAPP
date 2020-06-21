@@ -28,6 +28,8 @@ namespace OnlineEducationAPP.MvcWebUI.Controllers
         {
             ViewData["CurrentFilter"] = searchString;
 
+
+
             var streamList = from stream in unitOfWork.Streams.GetAll().Include(t => t.User).Include(t => t.Course).ThenInclude(t=>t.Category)
                              select stream;
 
